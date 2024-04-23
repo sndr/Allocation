@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Container, Grid, Typography, Box, Paper, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import { TextField, Button, Container, Grid, Typography, Box, Paper } from '@mui/material';
 
 function App() {
   const [salas, setSalas] = useState([]);
@@ -22,14 +22,14 @@ function App() {
 
   const inputFields = [
     { label: 'Nome da Sala', name: 'nome' },
-    { label: 'Ambiente', name: 'ambiente' },
+    { label: 'Turma', name: 'turma' },
+    { label: 'Professor', name: 'professor' },
+    { label: 'Disciplina', name: 'disciplina' },
+    { label: 'Horário', name: 'horario' },
+    { label: 'Alunos', name: 'alunos' },
+    { label: 'Local', name: 'local' },
     { label: 'Capacidade', name: 'capacidade' },
-    { label: 'Bloco', name: 'bloco' },
-    { label: 'Ar', name: 'ar' },
-    { label: 'Ventilador', name: 'ventilador' },
-    { label: 'Quadro Giz', name: 'quadroGiz' },
-    { label: 'Quadro Branco', name: 'quadroBranco' },
-    { label: 'Quadro Vidro', name: 'quadroVidro' }
+    { label: 'Equipamentos', name: 'equipamentos' }
   ];
 
   return (
@@ -38,72 +38,42 @@ function App() {
         <Box display="flex" justifyContent="center" marginTop="20px">
           <Typography variant="h4" gutterBottom>Painel de Alocação</Typography>
         </Box>
+        <Grid container spacing={2}>
+          {salas.map((sala, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <Paper elevation={3} style={{ padding: '10px' }}>
+                <Typography variant="h5">{sala.nome}</Typography>
+                <Typography>Turma: {sala.turma}</Typography>
+                <Typography>Professor: {sala.professor}</Typography>
+                <Typography>Disciplina: {sala.disciplina}</Typography>
+                <Typography>Horário: {sala.horario}</Typography>
+                <Typography>Alunos: {sala.alunos}</Typography>
+                <Typography>Local: {sala.local}</Typography>
+                <Typography>Capacidade: {sala.capacidade}</Typography>
+                <Typography>Equipamentos: {sala.equipamentos}</Typography>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+
         <Grid container spacing={2} style={{ marginTop: '20px' }}>
           <Paper elevation={3} style={{ padding: '20px', width: '100%' }}>
-            <Typography variant="h4" gutterBottom style={{ marginBottom: '20px' }}>Salas</Typography>
+            <Typography variant="h4" gutterBottom style={{ marginBottom: '20px' }}>Nova Sala</Typography>
             <form onSubmit={handleConfirmAll}>
               <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6} md={4}>
+                {inputFields.map((input, index) => (
+                  <Grid item xs={12} sm={6} md={4} key={index}>
                     <TextField
-                      name="nome"
-                      label="Nome da Sala"
+                      name={input.name}
+                      label={input.label}
                       variant="outlined"
                       fullWidth
-                      value=""
+                      value={formData[input.name] || ''}
+                      onChange={handleChange}
                     />
-                    <Button onClick="">Limpar</Button>
+                    <Button onClick={() => handleClearField(input.name)}>Limpar</Button>
                   </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <TextField
-                      name="bloco"
-                      label="Bloco"
-                      variant="outlined"
-                      fullWidth
-                      value=""
-                    />
-                    <Button onClick="">Limpar</Button>
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <TextField
-                      name="capacidade"
-                      label="Capacidade"
-                      variant="outlined"
-                      type="number"
-                      fullWidth
-                      InputProps={{
-                        inputProps: { min: 0 }
-                      }}
-                    />
-                    <Button onClick="">Limpar</Button>
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <FormControl fullWidth>
-                      <InputLabel id="labelAmbiente">Ambiente</InputLabel>
-                      <Select
-                        labelId='labelAmbiente'
-                        name="ambiente"
-                        value=""
-                        label="Ambiente"
-                      >
-                          <MenuItem value="Sala Comum">Sala Comum</MenuItem>
-                          <MenuItem value="Laboratório">Laboratório</MenuItem> 
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <FormControl fullWidth>
-                      <InputLabel id="labelAmbiente">Ambiente</InputLabel>
-                      <Select
-                        labelId='labelAmbiente'
-                        name="ambiente"
-                        value=""
-                        label="Ambiente"
-                      >
-                          <MenuItem value="Sala Comum">Sala Comum</MenuItem>
-                          <MenuItem value="Laboratório">Laboratório</MenuItem> 
-                      </Select>
-                    </FormControl>
-                  </Grid>
+                ))}
                 <Grid item xs={12} style={{ marginTop: '20px' }}>
                   <Button type="submit" variant="contained" color="primary">Confirmar</Button>
                 </Grid>
