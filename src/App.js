@@ -74,8 +74,6 @@ function App() {
       quadroVidro: 0,
       bloco: '',
       nomeDisciplina: '',
-      horario: '',
-      curso: ''
     }]);
   };
 
@@ -228,8 +226,6 @@ function App() {
     { label: 'Quadro Giz', name: 'quadroGiz', type: 'checkbox' },
     { label: 'Quadro Branco', name: 'quadroBranco', type: 'checkbox' },
     { label: 'Quadro de Vidro', name: 'quadroVidro', type: 'checkbox' },
-    { label: 'Horário', name: 'horario', type: 'text' },
-    { label: 'Curso', name: 'curso', type: 'text' }
   ];
 
   const inputFieldsTurma = [
