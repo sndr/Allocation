@@ -1,137 +1,299 @@
-import React, { useState } from 'react';
-import { TextField, Button, Container, Grid, Typography, Box, Paper, Select, MenuItem, InputLabel, FormControl, Checkbox, FormControlLabel } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { TextField, Button, Container, Typography, Box, Paper, Select, MenuItem, InputLabel, FormControl, Checkbox, FormControlLabel, Grid, createTheme, ThemeProvider, Stack } from '@mui/material';
 
 function App() {
   const [salas, setSalas] = useState([]);
-  const [formData, setFormData] = useState({});
+  const [turmas, setTurmas] = useState([]);
+  const [darkMode, setDarkMode] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  useEffect(() => {
+    const savedSalas = JSON.parse(localStorage.getItem('salas'));
+    const savedTurmas = JSON.parse(localStorage.getItem('turmas'));
+
+    if (savedSalas) {
+      setSalas(savedSalas);
+    }
+
+    if (savedTurmas) {
+      setTurmas(savedTurmas);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('salas', JSON.stringify(salas));
+    localStorage.setItem('turmas', JSON.stringify(turmas));
+  }, [salas, turmas]);
+
+  const handleSalaChange = (index, e) => {
+    const { name, type } = e.target;
+    let value = type === 'checkbox' ? e.target.checked : e.target.value;
+
+    if (name === 'capacidade') {
+      value = Math.max(0, value);
+    }
+
+    const updatedSalas = [...salas];
+    updatedSalas[index] = { ...updatedSalas[index], [name]: value };
+    setSalas(updatedSalas);
   };
 
-  const handleConfirmAll = (e) => {
-    e.preventDefault();
-    setSalas([...salas, formData]);
-    setFormData({});
+  const handleTurmaChange = (index, e) => {
+    const { name, type } = e.target;
+    let value = type === 'checkbox' ? e.target.checked : e.target.value;
+
+    if (name === 'qtdAlunos' || name === 'periodo') {
+      value = Math.max(0, value);
+    }
+
+    const updatedTurmas = [...turmas];
+    updatedTurmas[index] = { ...updatedTurmas[index], [name]: value };
+    setTurmas(updatedTurmas);
   };
 
-  const handleClearField = (fieldName) => {
-    setFormData({ ...formData, [fieldName]: '' });
+  const handleConfirmSala = (index) => {
+    const sala = salas[index];
+    const salaJSON = JSON.stringify(sala);
+    console.log(`Dados da Sala ${index + 1}:`, salaJSON);
   };
 
-  const inputFields = [
-    { label: 'Nome da Sala', name: 'nome' },
-    { label: 'Ambiente', name: 'ambiente' },
-    { label: 'Capacidade', name: 'capacidade' },
-    { label: 'Bloco', name: 'bloco' },
-    { label: 'Ar', name: 'ar' },
-    { label: 'Ventilador', name: 'ventilador' },
-    { label: 'Quadro Giz', name: 'quadroGiz' },
-    { label: 'Quadro Branco', name: 'quadroBranco' },
-    { label: 'Quadro Vidro', name: 'quadroVidro' }
+  const handleConfirmTurma = (index) => {
+    const turma = turmas[index];
+    const turmaJSON = JSON.stringify(turma);
+    console.log(`Dados da Turma ${index + 1}:`, turmaJSON);
+  };
+
+  const handleAddSala = () => {
+    setSalas([...salas, {
+      nome: '',
+      ambiente: '',
+      ar: 0,
+      ventilador: 0,
+      capacidade: 0,
+      quadroGiz: 0,
+      quadroBranco: 0,
+      quadroVidro: 0,
+      bloco: '',
+      nomeDisciplina: '',
+      horario: '',
+      curso: ''
+    }]);
+  };
+
+  const handleAddTurma = () => {
+    setTurmas([...turmas, {
+      qtdAlunos: 0,
+      periodo: 0,
+      nomeDisciplina: '',
+      horario: '',
+      curso: ''
+    }]);
+  };
+
+  const handleRemoveSala = (index) => {
+    const updatedSalas = [...salas];
+    updatedSalas.splice(index, 1);
+    setSalas(updatedSalas);
+  };
+
+  const handleRemoveTurma = (index) => {
+    const updatedTurmas = [...turmas];
+    updatedTurmas.splice(index, 1);
+    setTurmas(updatedTurmas);
+  };
+
+  const renderSala = (sala, index) => {
+    return (
+      <Box key={index} mb={2} width="100%">
+        <Paper elevation={3} style={{ padding: '20px', backgroundColor: darkMode ? '#333' : '#fff', color: darkMode ? '#fff' : '#333', display: 'flex', flexDirection: 'column', gap: '20px', marginLeft: '-15px', marginRight: '-15px' }}>
+          <Typography variant="h6" gutterBottom>Sala {index + 1}</Typography>
+          <Stack direction="row" spacing={2}>
+            {inputFieldsSala.map(field => (
+              <FormControl key={field.name} fullWidth>
+                {field.type === 'checkbox' ? (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        name={field.name}
+                        checked={sala[field.name] || false}
+                        onChange={e => handleSalaChange(index, e)}
+                      />
+                    }
+                    label={field.label}
+                  />
+                ) : field.type === 'select' ? (
+                  <>
+                    <InputLabel id={`${field.name}-label-${index}`}>{field.label}</InputLabel>
+                    <Select
+                      labelId={`${field.name}-label-${index}`}
+                      name={field.name}
+                      value={sala[field.name] || ''}
+                      label={field.label}
+                      onChange={e => handleSalaChange(index, e)}
+                    >
+                      {field.options.map(option => (
+                        <MenuItem key={option} value={option}>{option}</MenuItem>
+                      ))}
+                    </Select>
+                  </>
+                ) : (
+                  <TextField
+                    name={field.name}
+                    label={field.label}
+                    variant="outlined"
+                    fullWidth
+                    value={sala[field.name] || ''}
+                    onChange={e => handleSalaChange(index, e)}
+                    type={field.type}
+                    InputProps={field.inputProps}
+                  />
+                )}
+              </FormControl>
+            ))}
+          </Stack>
+          <Box alignSelf="flex-end">
+            <Button variant="contained" color="primary" onClick={() => handleConfirmSala(index)}>Confirmar</Button>
+            <Button variant="contained" color="secondary" onClick={() => handleRemoveSala(index)}>Remover</Button>
+          </Box>
+        </Paper>
+      </Box>
+    );
+  };
+
+  const renderTurma = (turma, index) => {
+    return (
+      <Box key={index} mb={2} width="100%">
+        <Paper elevation={3} style={{ padding: '20px', backgroundColor: darkMode ? '#333' : '#fff', color: darkMode ? '#fff' : '#333', display: 'flex', flexDirection: 'column', gap: '20px', marginLeft: '-15px', marginRight: '-15px' }}>
+          <Typography variant="h6" gutterBottom>Turma {index + 1}</Typography>
+          <Stack direction="row" spacing={2}>
+            {inputFieldsTurma.map(field => (
+              <FormControl key={field.name} fullWidth>
+                {field.type === 'checkbox' ? (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        name={field.name}
+                        checked={turma[field.name] || false}
+                        onChange={e => handleTurmaChange(index, e)}
+                      />
+                    }
+                    label={field.label}
+                  />
+                ) : field.type === 'select' ? (
+                  <>
+                    <InputLabel id={`${field.name}-label-${index}`}>{field.label}</InputLabel>
+                    <Select
+                      labelId={`${field.name}-label-${index}`}
+                      name={field.name}
+                      value={turma[field.name] || ''}
+                      label={field.label}
+                      onChange={e => handleTurmaChange(index, e)}
+                    >
+                      {field.options.map(option => (
+                        <MenuItem key={option} value={option}>{option}</MenuItem>
+                      ))}
+                    </Select>
+                  </>
+                ) : (
+                  <TextField
+                    name={field.name}
+                    label={field.label}
+                    variant="outlined"
+                    fullWidth
+                    value={turma[field.name] || ''}
+                    onChange={e => handleTurmaChange(index, e)}
+                    type={field.type}
+                    InputProps={field.inputProps}
+                  />
+                )}
+              </FormControl>
+            ))}
+          </Stack>
+          <Box alignSelf="flex-end">
+            <Button variant="contained" color="primary" onClick={() => handleConfirmTurma(index)}>Confirmar</Button>
+            <Button variant="contained" color="secondary" onClick={() => handleRemoveTurma(index)}>Remover</Button>
+          </Box>
+        </Paper>
+      </Box>
+    );
+  };
+
+  const inputFieldsSala = [
+    { label: 'Nome da Sala', name: 'nome', type: 'text' },
+    { label: 'Bloco', name: 'bloco', type: 'text' },
+    { label: 'Capacidade', name: 'capacidade', type: 'number', inputProps: { min: 0 } },
+    { label: 'Ambiente', name: 'ambiente', type: 'select', options: ['Sala Comum', 'Laboratório'] },
+    { label: 'Disciplina', name: 'nomeDisciplina', type: 'select', options: ['Cálculo I', 'Engenharia de Software'] },
+    { label: 'Ar Condicionado', name: 'ar', type: 'checkbox' },
+    { label: 'Ventilador', name: 'ventilador', type: 'checkbox' },
+    { label: 'Quadro Giz', name: 'quadroGiz', type: 'checkbox' },
+    { label: 'Quadro Branco', name: 'quadroBranco', type: 'checkbox' },
+    { label: 'Quadro de Vidro', name: 'quadroVidro', type: 'checkbox' },
+    { label: 'Horário', name: 'horario', type: 'text' },
+    { label: 'Curso', name: 'curso', type: 'text' }
   ];
 
-  return (
-    <div style={{ background: 'linear-gradient(to bottom, #ffffff, #000000)', minHeight: '100vh' }}>
-      <Container maxWidth="lg">
-        <Box display="flex" justifyContent="center" marginTop="10%">
-          <Typography variant="h3" gutterBottom>Painel de Alocação</Typography>
-        </Box>
-        <Grid container spacing={2} style={{ marginTop: '20px' }}>
-          <Paper elevation={3} style={{ padding: '20px', width: '100%' }}>
-            <Typography variant="h4" gutterBottom style={{ marginBottom: '20px' }}>Salas</Typography>
-            <form onSubmit={handleConfirmAll}>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6} md={4}>
-                  <TextField
-                    name="nome"
-                    label="Nome da Sala"
-                    variant="outlined"
-                    fullWidth
-                    value={formData.nome || ''}
-                    onChange={handleChange}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                  <TextField
-                    name="bloco"
-                    label="Bloco"
-                    variant="outlined"
-                    fullWidth
-                    value={formData.bloco || ''}
-                    onChange={handleChange}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                  <TextField
-                    name="capacidade"
-                    label="Capacidade"
-                    variant="outlined"
-                    type="number"
-                    fullWidth
-                    InputProps={{
-                      inputProps: { min: 0 }
-                    }}
-                    value={formData.capacidade || ''}
-                    onChange={handleChange}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                  <FormControl fullWidth>
-                    <InputLabel id="labelAmbiente">Ambiente</InputLabel>
-                    <Select
-                      labelId='labelAmbiente'
-                      name="ambiente"
-                      value={formData.ambiente || ''}
-                      label="Ambiente"
-                      onChange={handleChange}
-                    >
-                      <MenuItem value="Sala Comum">Sala Comum</MenuItem>
-                      <MenuItem value="Laboratório">Laboratório</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                  <FormControlLabel
-                    control={<Checkbox name="ar" />}
-                    label="Ar"
-                  />
-                </Grid>
+  const inputFieldsTurma = [
+    { label: 'Quantidade de Alunos', name: 'qtdAlunos', type: 'number', inputProps: { min: 0 } },
+    { label: 'Período', name: 'periodo', type: 'number', inputProps: { min: 0 } },
+    { label: 'Disciplina', name: 'nomeDisciplina', type: 'text' },
+    { label: 'Horário', name: 'horario', type: 'text' },
+    { label: 'Curso', name: 'curso', type: 'text' }
+  ];
 
-                <Grid item xs={12} sm={6} md={4}>
-                  <FormControlLabel
-                    control={<Checkbox name="ventilador" />}
-                    label="Ventilador"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                  <FormControlLabel
-                    control={<Checkbox name="quadroGiz" />}
-                    label="Quadro Giz"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                  <FormControlLabel
-                    control={<Checkbox name="quadroBranco" />}
-                    label="Quadro Branco"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                  <FormControlLabel
-                    control={<Checkbox name="quadroVidro" />}
-                    label="Quadro Vidro"
-                  />
-                </Grid>
-                <Grid item xs={12} style={{ marginTop: '20px' }}>
-                  <Button type="submit" variant="contained" color="primary">Confirmar</Button>
-                </Grid>
-              </Grid>
-            </form>
-          </Paper>
-        </Grid>
-      </Container>
-    </div>
+  // Tema claro e escuro personalizado
+  const lightTheme = createTheme({
+    palette: {
+      mode: 'light',
+    },
+  });
+
+  const darkTheme = createTheme({
+    palette: {
+      mode: 'dark',
+      background: {
+        default: '#333',
+      },
+      text: {
+        primary: '#fff',
+      },
+    },
+  });
+
+  return (
+    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
+      <Box sx={{ backgroundColor: darkMode ? '#333' : '#fff', minHeight: '100vh', transition: 'background-color 0.3s, color 0.3s', paddingTop: '2rem' }}>
+        <Container maxWidth={false}>
+          <Box mb={2} textAlign="center">
+            <Typography variant="h4" gutterBottom>
+              Alocação de salas e turmas
+            </Typography>
+          </Box>
+          <Box mb={2} textAlign="center">
+            <Button variant="contained" color="primary" onClick={() => setDarkMode(prevMode => !prevMode)}>
+              {darkMode ? 'Modo Claro' : 'Modo Escuro'}
+            </Button>
+          </Box>
+          <Box mb={2} textAlign="center">
+            <Box display="inline-block" mx={1}>
+              <Button variant="contained" color="primary" onClick={handleAddSala}>
+                Adicionar Sala
+              </Button>
+            </Box>
+            <Box display="inline-block" mx={1}>
+              <Button variant="contained" color="primary" onClick={handleAddTurma}>
+                Adicionar Turma
+              </Button>
+            </Box>
+          </Box>
+          <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between">
+            {salas.map((sala, index) => renderSala(sala, index))}
+          </Box>
+          <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between">
+            {turmas.map((turma, index) => renderTurma(turma, index))}
+          </Box>
+        </Container>
+      </Box>
+    </ThemeProvider>
   );
 }
 
