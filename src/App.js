@@ -33,10 +33,10 @@ function App() {
   ];
 
   return (
-    <div style={{ background: 'linear-gradient(to bottom, #f2f5f8, #d7e1eb)', minHeight: '100vh' }}>
+    <div style={{ background: 'linear-gradient(to bottom, #ffffff, #000000)', minHeight: '100vh' }}>
       <Container maxWidth="lg">
-        <Box display="flex" justifyContent="center" marginTop="20px">
-          <Typography variant="h4" gutterBottom>Painel de Alocação</Typography>
+        <Box display="flex" justifyContent="center" marginTop="10%">
+          <Typography variant="h3" gutterBottom>Painel de Alocação</Typography>
         </Box>
         <Grid container spacing={2} style={{ marginTop: '20px' }}>
           <Paper elevation={3} style={{ padding: '20px', width: '100%' }}>
