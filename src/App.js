@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Container, Grid, Typography, Box, Paper, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import { TextField, Button, Container, Grid, Typography, Box, Paper, Select, MenuItem, InputLabel, FormControl, Checkbox, FormControlLabel } from '@mui/material';
 
 function App() {
   const [salas, setSalas] = useState([]);
@@ -43,67 +43,86 @@ function App() {
             <Typography variant="h4" gutterBottom style={{ marginBottom: '20px' }}>Salas</Typography>
             <form onSubmit={handleConfirmAll}>
               <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <TextField
-                      name="nome"
-                      label="Nome da Sala"
-                      variant="outlined"
-                      fullWidth
-                      value=""
-                    />
-                    <Button onClick="">Limpar</Button>
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <TextField
-                      name="bloco"
-                      label="Bloco"
-                      variant="outlined"
-                      fullWidth
-                      value=""
-                    />
-                    <Button onClick="">Limpar</Button>
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <TextField
-                      name="capacidade"
-                      label="Capacidade"
-                      variant="outlined"
-                      type="number"
-                      fullWidth
-                      InputProps={{
-                        inputProps: { min: 0 }
-                      }}
-                    />
-                    <Button onClick="">Limpar</Button>
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <FormControl fullWidth>
-                      <InputLabel id="labelAmbiente">Ambiente</InputLabel>
-                      <Select
-                        labelId='labelAmbiente'
-                        name="ambiente"
-                        value=""
-                        label="Ambiente"
-                      >
-                          <MenuItem value="Sala Comum">Sala Comum</MenuItem>
-                          <MenuItem value="Laboratório">Laboratório</MenuItem> 
-                      </Select>
-                    </FormControl>
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <FormControl fullWidth>
-                      <InputLabel id="labelAmbiente">Ambiente</InputLabel>
-                      <Select
-                        labelId='labelAmbiente'
-                        name="ambiente"
-                        value=""
-                        label="Ambiente"
-                      >
-                          <MenuItem value="Sala Comum">Sala Comum</MenuItem>
-                          <MenuItem value="Laboratório">Laboratório</MenuItem> 
-                      </Select>
-                    </FormControl>
-                  </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <TextField
+                    name="nome"
+                    label="Nome da Sala"
+                    variant="outlined"
+                    fullWidth
+                    value={formData.nome || ''}
+                    onChange={handleChange}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <TextField
+                    name="bloco"
+                    label="Bloco"
+                    variant="outlined"
+                    fullWidth
+                    value={formData.bloco || ''}
+                    onChange={handleChange}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <TextField
+                    name="capacidade"
+                    label="Capacidade"
+                    variant="outlined"
+                    type="number"
+                    fullWidth
+                    InputProps={{
+                      inputProps: { min: 0 }
+                    }}
+                    value={formData.capacidade || ''}
+                    onChange={handleChange}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <FormControl fullWidth>
+                    <InputLabel id="labelAmbiente">Ambiente</InputLabel>
+                    <Select
+                      labelId='labelAmbiente'
+                      name="ambiente"
+                      value={formData.ambiente || ''}
+                      label="Ambiente"
+                      onChange={handleChange}
+                    >
+                      <MenuItem value="Sala Comum">Sala Comum</MenuItem>
+                      <MenuItem value="Laboratório">Laboratório</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <FormControlLabel
+                    control={<Checkbox name="ar" />}
+                    label="Ar"
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6} md={4}>
+                  <FormControlLabel
+                    control={<Checkbox name="ventilador" />}
+                    label="Ventilador"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <FormControlLabel
+                    control={<Checkbox name="quadroGiz" />}
+                    label="Quadro Giz"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <FormControlLabel
+                    control={<Checkbox name="quadroBranco" />}
+                    label="Quadro Branco"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <FormControlLabel
+                    control={<Checkbox name="quadroVidro" />}
+                    label="Quadro Vidro"
+                  />
+                </Grid>
                 <Grid item xs={12} style={{ marginTop: '20px' }}>
                   <Button type="submit" variant="contained" color="primary">Confirmar</Button>
                 </Grid>
