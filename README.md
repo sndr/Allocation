@@ -3,18 +3,20 @@
 Este é um aplicativo React desenvolvido para facilitar a alocação de salas e turmas em um ambiente educacional. O aplicativo permite adicionar, visualizar e modificar informações sobre salas e turmas, além de importar dados a partir de arquivos Excel (.xlsx, .xls).
 
 ## Funcionalidades Principais
-Gerenciamento de Salas e Turmas
 
-Adicionar, remover e confirmar informações de salas e turmas.
-Capacidade de especificar detalhes como nome, ambiente, capacidade, equipamentos disponíveis, disciplina, e outros.
+- Gerenciamento de Salas e Turmas
 
-`Modo Claro e Escuro`
+- Adicionar, remover e confirmar informações de salas e turmas.
 
-Alternar entre modo claro e escuro para uma melhor experiência visual.
+- Capacidade de especificar detalhes como nome, ambiente, capacidade, equipamentos disponíveis, disciplina, e outros.
 
-Importação de Dados
+- Modo Claro e Escuro
 
-Carregar dados a partir de arquivos Excel para adicionar novas salas e turmas de forma eficiente.
+- Alternar entre modo claro e escuro para uma melhor experiência visual.
+
+- Importação de Dados
+
+- Carregar dados a partir de arquivos Excel para adicionar novas salas e turmas de forma eficiente.
 ## Uso
 Modo de Visualização
 
@@ -42,7 +44,7 @@ Este código é um exemplo de aplicação React funcional que utiliza diversos c
 
 ## Instruções de Execução
 
-### Clone o repositório.
+### `Clone o repositório`.
 Instale as dependências com `npm install`.
 
 Inicie o aplicativo com `npm start`.
