@@ -7,9 +7,11 @@ Gerenciamento de Salas e Turmas
 
 Adicionar, remover e confirmar informações de salas e turmas.
 Capacidade de especificar detalhes como nome, ambiente, capacidade, equipamentos disponíveis, disciplina, e outros.
-### ´Modo Claro e Escuro´
+
+`Modo Claro e Escuro`
 
 Alternar entre modo claro e escuro para uma melhor experiência visual.
+
 Importação de Dados
 
 Carregar dados a partir de arquivos Excel para adicionar novas salas e turmas de forma eficiente.
@@ -38,8 +40,8 @@ Este código é um exemplo de aplicação React funcional que utiliza diversos c
 ## Instruções de Execução
 
 ### Clone o repositório.
-Instale as dependências com ### `npm install`.
-Inicie o aplicativo com ### `npm start`.
+Instale as dependências com `npm install`.
+Inicie o aplicativo com `npm start`.
 Para mais informações sobre como utilizar ou estender este aplicativo, consulte o código-fonte e os comentários incluídos para detalhes adicionais.
 
 
