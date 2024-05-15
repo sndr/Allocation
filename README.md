@@ -32,17 +32,20 @@ Os detalhes de cada sala e turma são apresentados em caixas individuais com op�
 
 Tecnologias Utilizadas
 `React`: Biblioteca JavaScript para construção de interfaces interativas.
-`Material-UI`: Framework de componentes React para um design visual moderno.
-`XLSX`: Biblioteca JavaScript para leitura de arquivos Excel.
-Este código é um exemplo de aplicação React funcional que utiliza diversos componentes do Material-UI para criar uma interface intuitiva para gerenciamento de dados de salas e turmas. Certifique-se de configurar o ambiente e instalar as dependências necessárias para executar o aplicativo localmente.
 
+`Material-UI`: Framework de componentes React para um design visual moderno.
+
+`XLSX`: Biblioteca JavaScript para leitura de arquivos Excel.
+
+Este código é um exemplo de aplicação React funcional que utiliza diversos componentes do Material-UI para criar uma interface intuitiva para gerenciamento de dados de salas e turmas. Certifique-se de configurar o ambiente e instalar as dependências necessárias para executar o aplicativo localmente.
 
 ## Instruções de Execução
 
 ### Clone o repositório.
 Instale as dependências com `npm install`.
+
 Inicie o aplicativo com `npm start`.
-Para mais informações sobre como utilizar ou estender este aplicativo, consulte o código-fonte e os comentários incluídos para detalhes adicionais.
+
 
 
 
