@@ -1,69 +1,47 @@
 # Alocação de Salas e Turmas
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este é um aplicativo React desenvolvido para facilitar a alocação de salas e turmas em um ambiente educacional. O aplicativo permite adicionar, visualizar e modificar informações sobre salas e turmas, além de importar dados a partir de arquivos Excel (.xlsx, .xls).
 
-## Available Scripts
+## Funcionalidades Principais
+Gerenciamento de Salas e Turmas
 
-In the project directory, you can run:
+Adicionar, remover e confirmar informações de salas e turmas.
+Capacidade de especificar detalhes como nome, ambiente, capacidade, equipamentos disponíveis, disciplina, e outros.
+### ´Modo Claro e Escuro´
 
-### `npm start`
+Alternar entre modo claro e escuro para uma melhor experiência visual.
+Importação de Dados
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Carregar dados a partir de arquivos Excel para adicionar novas salas e turmas de forma eficiente.
+Uso
+Modo de Visualização
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+O aplicativo carrega com informações previamente salvas, se disponíveis, ou inicia com listas vazias de salas e turmas.
+Adicionar e Remover
 
-### `npm test`
+Utilize os botões "Adicionar Sala" e "Adicionar Turma" para incluir novos registros.
+Confirme ou remova salas/turmas conforme necessário.
+Importação de Dados
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+O botão "Receber Excel" permite carregar dados de um arquivo Excel para adicionar múltiplas salas e turmas de uma só vez.
+Modo Visual
 
-### `npm run build`
+Os detalhes de cada sala e turma são apresentados em caixas individuais com opções interativas para editar e confirmar informações.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Tecnologias Utilizadas
+React: Biblioteca JavaScript para construção de interfaces interativas.
+Material-UI: Framework de componentes React para um design visual moderno.
+XLSX: Biblioteca JavaScript para leitura de arquivos Excel.
+Este código é um exemplo de aplicação React funcional que utiliza diversos componentes do Material-UI para criar uma interface intuitiva para gerenciamento de dados de salas e turmas. Certifique-se de configurar o ambiente e instalar as dependências necessárias para executar o aplicativo localmente.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Instruções de Execução
 
-### `npm run eject`
+### ´Clone o repositório.´
+Instale as dependências com ### ´npm install´.
+Inicie o aplicativo com ### ´npm start´.
+Para mais informações sobre como utilizar ou estender este aplicativo, consulte o código-fonte e os comentários incluídos para detalhes adicionais.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
 ### `npm run build` fails to minify
 
