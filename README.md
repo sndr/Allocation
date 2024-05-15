@@ -13,7 +13,7 @@ Alternar entre modo claro e escuro para uma melhor experiência visual.
 Importação de Dados
 
 Carregar dados a partir de arquivos Excel para adicionar novas salas e turmas de forma eficiente.
-Uso
+## Uso
 Modo de Visualização
 
 O aplicativo carrega com informações previamente salvas, se disponíveis, ou inicia com listas vazias de salas e turmas.
@@ -29,20 +29,18 @@ Modo Visual
 Os detalhes de cada sala e turma são apresentados em caixas individuais com opções interativas para editar e confirmar informações.
 
 Tecnologias Utilizadas
-React: Biblioteca JavaScript para construção de interfaces interativas.
-Material-UI: Framework de componentes React para um design visual moderno.
-XLSX: Biblioteca JavaScript para leitura de arquivos Excel.
+`React`: Biblioteca JavaScript para construção de interfaces interativas.
+`Material-UI`: Framework de componentes React para um design visual moderno.
+`XLSX`: Biblioteca JavaScript para leitura de arquivos Excel.
 Este código é um exemplo de aplicação React funcional que utiliza diversos componentes do Material-UI para criar uma interface intuitiva para gerenciamento de dados de salas e turmas. Certifique-se de configurar o ambiente e instalar as dependências necessárias para executar o aplicativo localmente.
 
 
 ## Instruções de Execução
 
-### ´Clone o repositório.´
-Instale as dependências com ### ´npm install´.
-Inicie o aplicativo com ### ´npm start´.
+### Clone o repositório.
+Instale as dependências com ### `npm install`.
+Inicie o aplicativo com ### `npm start`.
 Para mais informações sobre como utilizar ou estender este aplicativo, consulte o código-fonte e os comentários incluídos para detalhes adicionais.
 
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
