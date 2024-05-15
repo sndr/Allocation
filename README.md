@@ -31,6 +31,7 @@ Modo Visual
 Os detalhes de cada sala e turma são apresentados em caixas individuais com opções interativas para editar e confirmar informações.
 
 Tecnologias Utilizadas
+
 `React`: Biblioteca JavaScript para construção de interfaces interativas.
 
 `Material-UI`: Framework de componentes React para um design visual moderno.
