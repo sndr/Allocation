@@ -116,12 +116,34 @@ Abra um Pull Request.
 ## Contato
 Se tiver alguma dúvida ou sugestão, sinta-se à vontade para abrir uma issue ou entrar em contato.
 
-## Contribuidores Front-end
+### Contribuidores
 
-Agradecemos aos seguintes contribuidores que ajudaram a tornar este projeto melhor:
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/Davi-Andrade-30">
+        <img src="https://avatars.githubusercontent.com/u/12345678?v=4" width="100px;" alt=""/>
+      </a>
+      <br />
+      <sub><b>Seu Usuário</b></sub>
+      <br />
+      <a href="#code-seu-usuario" title="Code">💻</a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/LuciosSB">
+        <img src="https://avatars.githubusercontent.com/u/87654321?v=4" width="100px;" alt=""/>
+      </a>
+      <br />
+      <sub><b>Outro Contribuidor</b></sub>
+      <br />
+      <a href="#code-outro-contribuidor" title="Code">💻</a>
+    </td>
+  </tr>
+</table>
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 - [Davi-Andrade-30](https://github.com/Davi-Andrade-30)
 - [LuciosSB](https://github.com/LuciosSB)
 
-## Contribuição
-  
