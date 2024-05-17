@@ -136,7 +136,6 @@ Se tiver alguma dúvida ou sugestão, sinta-se à vontade para abrir uma issue o
       <sub><b>Lucas</b></sub>
       <br />
     </td>
-  </tr>
     <td align="center">
       <a href="https://github.com/marcub">
         <img src="https://avatars.githubusercontent.com/u/42722469?v=4" width="100px;" alt=""/>
