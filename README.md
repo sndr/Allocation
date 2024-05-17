@@ -113,13 +113,13 @@ Faça suas modificações.
 `git push origin minha-feature`
 Abra um Pull Request.
 
-## Licença
-Este projeto está licenciado sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
-
 ## Contato
 Se tiver alguma dúvida ou sugestão, sinta-se à vontade para abrir uma issue ou entrar em contato.
 
-Esperamos que este projeto seja útil para suas necessidades de gerenciamento de salas e turmas!
+## Contribuidores Front-end
 
+Agradecemos aos seguintes contribuidores que ajudaram a tornar este projeto melhor:
 
+- [Davi-Andrade-30](https://github.com/Davi-Andrade-30)
+- [LuciosSB](https://github.com/LuciosSB)
   
