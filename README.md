@@ -92,42 +92,9 @@ O código principal está no arquivo App.js e utiliza React para gerenciar o est
   - Alterna entre temas claro e escuro com base no estado darkMode.
   - Backend e Endpoints
     
-## Endpoints
-Para esta aplicação, os dados de salas e turmas são armazenados localmente usando localStorage. No entanto, para uma aplicação em produção, é comum integrar com um backend que fornece endpoints para gerenciar os dados de forma persistente e centralizada.
-
-# Estrutura dos Endpoints
-GET /salas
-
-# Retorna a lista de todas as salas.
-POST /salas
-
-# Adiciona uma nova sala.
-Parâmetros: dados da sala no corpo da requisição.
-PUT /salas/:id
-
-# Atualiza uma sala existente.
-Parâmetros: ID da sala na URL e dados da sala no corpo da requisição.
-DELETE /salas/:id
-
-# Remove uma sala existente.
-Parâmetros: ID da sala na URL.
-GET /turmas
-
-# Retorna a lista de todas as turmas.
-POST /turmas
-
-# Adiciona uma nova turma.
-Parâmetros: dados da turma no corpo da requisição.
-PUT /turmas/:id
-
-# Atualiza uma turma existente.
-Parâmetros: ID da turma na URL e dados da turma no corpo da requisição.
-DELETE /turmas/:id
-Remove uma turma existente.
-Parâmetros: ID da turma na URL.
-
 ## Repositório do Backend
-O repositório do backend pode ser encontrado em marcub/alocaai-api. Este repositório contém a implementação dos endpoints descritos acima, utilizando uma stack tecnológica adequada (por exemplo, Node.js com Express, ou outra de sua preferência).
+O repositório do backend pode ser encontrado em [marcub/alocaai-api](https://github.com/marcub/alocaai-api). 
+Este repositório contém a implementação dos endpoints descritos acima, utilizando uma stack tecnológica adequada (por exemplo, Node.js com Express, ou outra de sua preferência).
 
 ## Contribuição
 ### Fork o repositório.
@@ -140,10 +107,10 @@ Faça suas modificações.
 `git push origin minha-feature`
 Abra um Pull Request.
 
-##Licença
+## Licença
 Este projeto está licenciado sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
 
-##Contato
+## Contato
 Se tiver alguma dúvida ou sugestão, sinta-se à vontade para abrir uma issue ou entrar em contato.
 
 Esperamos que este projeto seja útil para suas necessidades de gerenciamento de salas e turmas!
