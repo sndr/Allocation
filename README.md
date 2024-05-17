@@ -118,8 +118,6 @@ Se tiver alguma dúvida ou sugestão, sinta-se à vontade para abrir uma issue o
 
 ### Contribuidores
 
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore -->
 <table>
   <tr>
     <td align="center">
@@ -141,7 +139,4 @@ Se tiver alguma dúvida ou sugestão, sinta-se à vontade para abrir uma issue o
   </tr>
 </table>
 <!-- ALL-CONTRIBUTORS-LIST:END -->
-
-- [Davi-Andrade-30](https://github.com/Davi-Andrade-30)
-- [LuciosSB](https://github.com/LuciosSB)
 
