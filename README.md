@@ -137,6 +137,15 @@ Se tiver alguma dúvida ou sugestão, sinta-se à vontade para abrir uma issue o
       <br />
     </td>
   </tr>
+    <td align="center">
+      <a href="https://github.com/marcub">
+        <img src="https://avatars.githubusercontent.com/u/42722469?v=4" width="100px;" alt=""/>
+      </a>
+      <br />
+      <sub><b>Marcus</b></sub>
+      <br />
+    </td>
+  </tr>
 </table>
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
