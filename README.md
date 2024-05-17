@@ -23,14 +23,14 @@ Este projeto é uma aplicação web para gerenciar a alocação de salas e turma
   - Interface responsiva e amigável para gerenciar salas e turmas.
   - Suporte a temas claro e escuro.
 
-##Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **Frontend:** React
 - **Bibliotecas:**
   - `@mui/material` para componentes de UI
   - `XLSX` para leitura de arquivos Excel
 
-##Instalação
+## Instalação
 
 1. Clone o repositório:
    ```bash
