@@ -124,21 +124,19 @@ Se tiver alguma dúvida ou sugestão, sinta-se à vontade para abrir uma issue o
   <tr>
     <td align="center">
       <a href="https://github.com/Davi-Andrade-30">
-        <img src="https://avatars.githubusercontent.com/u/12345678?v=4" width="100px;" alt=""/>
+        <img src="https://avatars.githubusercontent.com/u/84862726?v=4" width="100px;" alt=""/>
       </a>
       <br />
-      <sub><b>Seu Usuário</b></sub>
+      <sub><b>Davi</b></sub>
       <br />
-      <a href="#code-seu-usuario" title="Code">💻</a>
     </td>
     <td align="center">
       <a href="https://github.com/LuciosSB">
-        <img src="https://avatars.githubusercontent.com/u/87654321?v=4" width="100px;" alt=""/>
+        <img src="https://avatars.githubusercontent.com/u/124175033?v=4" width="100px;" alt=""/>
       </a>
       <br />
-      <sub><b>Outro Contribuidor</b></sub>
+      <sub><b>Lucas</b></sub>
       <br />
-      <a href="#code-outro-contribuidor" title="Code">💻</a>
     </td>
   </tr>
 </table>
