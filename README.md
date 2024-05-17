@@ -47,6 +47,10 @@ Este projeto é uma aplicação web para gerenciar a alocação de salas e turma
 
 ## Uso
 
+0.Subir aplicação
+ - `npm start`
+ - Apos subir a aplicação vai abrir o localhost 
+
 1.Adicionar Sala
   - Clique no botão "Adicionar Sala".
   - Preencha os campos do formulário da nova sala.
@@ -78,12 +82,14 @@ Este projeto é uma aplicação web para gerenciar a alocação de salas e turma
     
 8.Alternar Tema
  - Clique no botão "Modo Claro" ou "Modo Escuro" para alternar entre os temas.
+
+9.Gerar Planilha
+ - Aperte o botão "gerar planilha"
    
 ## Estrutura do Código
 O código principal está no arquivo App.js e utiliza React para gerenciar o estado e a interface do usuário. As bibliotecas @mui/material e XLSX são usadas para os componentes de UI e para a importação de dados de arquivos Excel, respectivamente.
 
 # Componentes Principais
-- App
   - Componente principal que gerencia o estado das salas e turmas.
   - Usa localStorage para persistência de dados.
   - Contém funções para adicionar, editar, remover e importar salas e turmas.
