@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import backgroundImage from './rick.jpg';
-import * as XLSX from 'xlsx';
-import { TextField, Button, Container, Typography, Box, Paper, Select, MenuItem, InputLabel, FormControl, Checkbox, FormControlLabel, Grid, createTheme, ThemeProvider, Stack } from '@mui/material';
+import { TextField, Button, Container, Typography, Box, Paper, Select, MenuItem, InputLabel, FormControl, Checkbox, FormControlLabel, createTheme, ThemeProvider, Stack } from '@mui/material';
+import $ from 'jquery';
+import '../src/App.css';
+import { writeFileXLSX, utils } from "xlsx";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { setHours, setMinutes } from 'date-fns';
 
 function App() {
   const [salas, setSalas] = useState([]);
@@ -28,7 +32,7 @@ function App() {
 
   const handleSalaChange = (index, e) => {
     const { name, type } = e.target;
-    let value = type === 'checkbox' ? e.target.checked : e.target.value;
+    let value = (type === 'checkbox') ? e.target.checked : e.target.value;
 
     if (name === 'capacidade') {
       value = Math.max(0, value);
@@ -40,42 +44,157 @@ function App() {
   };
 
   const handleTurmaChange = (index, e) => {
-    const { name, type } = e.target;
-    let value = type === 'checkbox' ? e.target.checked : e.target.value;
-
-    if (name === 'qtdAlunos' || name === 'periodo') {
-      value = Math.max(0, value);
+    const { name, value } = e.target;
+    const newTurmas = [...turmas];
+    newTurmas[index] = { ...newTurmas[index], [name]: value };
+  
+    if (name === 'turno') {
+      let horarioInicio, horarioFim;
+      let filterTime = {};
+      switch (value) {
+        case 'Matutino':
+          horarioInicio = setHours(setMinutes(new Date(), 0), 7);
+          horarioFim = setHours(setMinutes(new Date(), 0), 12);
+          filterTime = {
+            start: setHours(setMinutes(new Date(), 0), 7),
+            end: setHours(setMinutes(new Date(), 0), 12)
+          };
+          break;
+        case 'Vespertino':
+          horarioInicio = setHours(setMinutes(new Date(), 0), 13);
+          horarioFim = setHours(setMinutes(new Date(), 0), 17);
+          filterTime = {
+            start: setHours(setMinutes(new Date(), 0), 13),
+            end: setHours(setMinutes(new Date(), 0), 17)
+          };
+          break;
+        case 'Noturno':
+          horarioInicio = setHours(setMinutes(new Date(), 0), 18);
+          horarioFim = setHours(setMinutes(new Date(), 0), 22);
+          filterTime = {
+            start: setHours(setMinutes(new Date(), 0), 18),
+            end: setHours(setMinutes(new Date(), 0), 22)
+          };
+          break;
+        default:
+          break;
+      }
+      newTurmas[index].horarioInicio = horarioInicio;
+      newTurmas[index].horarioFim = horarioFim;
+      newTurmas[index].horarioFilter = filterTime;
     }
-
-    const updatedTurmas = [...turmas];
-    updatedTurmas[index] = { ...updatedTurmas[index], [name]: value };
-    setTurmas(updatedTurmas);
+  
+    setTurmas(newTurmas);
   };
+  
 
-  const handleConfirmSala = (index) => {
-    const sala = salas[index];
-    const salaJSON = JSON.stringify(sala);
-    console.log(`Dados da Sala ${index + 1}:`, salaJSON);
-  };
+  const handleConfirmJson = () => {
+    const salasList = salas;
+    const turmasList = turmas;
 
-  const handleConfirmTurma = (index) => {
-    const turma = turmas[index];
-    const turmaJSON = JSON.stringify(turma);
-    console.log(`Dados da Turma ${index + 1}:`, turmaJSON);
+    const salasJson  = [];
+    salasList.forEach((sala, index) => {
+      sala.ar = (sala.ar === true) ? 1 : 0;
+      sala.ventilador = (sala.ventilador === true) ? 1 : 0;
+      sala.quadroBranco = (sala.quadroBranco === true) ? 1 : 0;
+      sala.quadroGiz = (sala.quadroGiz === true) ? 1 : 0;
+      sala.quadroVidro = (sala.quadroVidro === true) ? 1 : 0;
+      salasJson.push(
+        {
+          nome: sala.nome,
+          ambiente: sala.ambiente,
+          ar: sala.ar,
+          ventilador: sala.ventilador,
+          capacidade: sala.capacidade,
+          quadroGiz: sala.quadroGiz,
+          quadroBranco: sala.quadroBranco,
+          quadroVidro: sala.quadroVidro,
+          bloco: sala.bloco
+        }
+      )
+    })
+
+    const turmasJson  = [];
+    turmasList.forEach((turma, index) => {
+      var recursos = [];
+      if (turma.ar === true) {
+        recursos.push('Ar Condicionado');
+      }
+      if (turma.ventilador === true) {
+        recursos.push('Ventilador');
+      }
+      if (turma.quadroBranco === true) {
+        recursos.push('Quandro Branco');
+      }
+      if (turma.quadroGiz === true) {
+        recursos.push('Quadro Giz');
+      }
+      if (turma.quadroVidro === true) {
+        recursos.push('Quadro Vidro');
+      }
+      turmasJson.push(
+        {
+          qtdAlunos: turma.capacidade,
+          periodo: turma.periodo,
+          disciplina: {
+            nome: turma.disciplinaNome,
+            recursos: recursos,
+            ambienteSalaAdequado: turma.ambienteSalaAdequado,
+          },
+          horario: {
+            horario: turma.horario,
+            diaSemana: turma.diaSemana,
+            turno: turma.turno,
+          },
+          curso: {
+            nome: turma.nomeCurso,
+          }
+        }
+      )
+    })
+
+    const jsonCall = {
+      turmas: turmasJson,
+      salas: salasJson
+    };
+
+    $.ajax({
+      url: 'http://localhost:8080/api/solucaoGulosa',
+      method: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify(jsonCall),
+      success: function(data) {
+        const wb = utils.book_new();
+
+        const aulas = data.map(item => ({
+            Sala: item.sala.nome,
+            Disciplina: item.disciplina.nome,
+            Horario: `${item.horario.diaSemana} - ${item.horario.horario}`,
+            Curso: item.curso.nome
+        }));
+
+        const ws = utils.json_to_sheet(aulas);
+        utils.book_append_sheet(wb, ws, "Horarios");
+        writeFileXLSX(wb, "Horarios.xlsx");
+      },
+      error: function(error) {
+        console.error('Erro ao realizar a solicitação:', error);
+      }
+    });
+    
   };
 
   const handleAddSala = () => {
     setSalas([...salas, {
       nome: '',
       ambiente: '',
-      ar: 0,
-      ventilador: 0,
+      ar: false,
+      ventilador: false,
       capacidade: 0,
-      quadroGiz: 0,
-      quadroBranco: 0,
-      quadroVidro: 0,
+      quadroGiz: false,
+      quadroBranco: false,
+      quadroVidro: false,
       bloco: '',
-      nomeDisciplina: '',
     }]);
   };
 
@@ -83,9 +202,18 @@ function App() {
     setTurmas([...turmas, {
       qtdAlunos: 0,
       periodo: 0,
-      nomeDisciplina: '',
-      horario: '',
-      curso: ''
+      disciplinaNome: "",
+      ambienteSalaAdequado: "",
+      horario: "",
+      diaSemana: "",
+      turno: "",
+      nomeCurso: "",
+      ventilador: false,
+      capacidade: 0,
+      quadroGiz: false,
+      quadroBranco: false,
+      quadroVidro: false,
+      ar: false,
     }]);
   };
 
@@ -151,7 +279,6 @@ function App() {
             ))}
           </Stack>
           <Box alignSelf="flex-end">
-            <Button variant="contained" color="primary" onClick={() => handleConfirmSala(index)}>Confirmar</Button>
             <Button variant="contained" color="secondary" onClick={() => handleRemoveSala(index)}>Remover</Button>
           </Box>
         </Paper>
@@ -159,70 +286,122 @@ function App() {
     );
   };
 
-  const renderTurma = (turma, index) => {
-    return (
-      <Box key={index} mb={2} width="100%">
-        <Paper elevation={3} style={{ padding: '20px', backgroundColor: darkMode ? '#333' : '#fff', color: darkMode ? '#fff' : '#333', display: 'flex', flexDirection: 'column', gap: '20px', marginLeft: '-15px', marginRight: '-15px' }}>
-          <Typography variant="h6" gutterBottom>Turma {index + 1}</Typography>
-          <Stack direction="row" spacing={2}>
-            {inputFieldsTurma.map(field => (
-              <FormControl key={field.name} fullWidth>
-                {field.type === 'checkbox' ? (
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        name={field.name}
-                        checked={turma[field.name] || false}
-                        onChange={e => handleTurmaChange(index, e)}
-                      />
-                    }
-                    label={field.label}
-                  />
-                ) : field.type === 'select' ? (
-                  <>
-                    <InputLabel id={`${field.name}-label-${index}`}>{field.label}</InputLabel>
-                    <Select
-                      labelId={`${field.name}-label-${index}`}
-                      name={field.name}
-                      value={turma[field.name] || ''}
-                      label={field.label}
-                      onChange={e => handleTurmaChange(index, e)}
-                    >
-                      {field.options.map(option => (
-                        <MenuItem key={option} value={option}>{option}</MenuItem>
-                      ))}
-                    </Select>
-                  </>
-                ) : (
-                  <TextField
-                    name={field.name}
-                    label={field.label}
-                    variant="outlined"
-                    fullWidth
-                    value={turma[field.name] || ''}
-                    onChange={e => handleTurmaChange(index, e)}
-                    type={field.type}
-                    InputProps={field.inputProps}
-                  />
-                )}
-              </FormControl>
-            ))}
-          </Stack>
-          <Box alignSelf="flex-end">
-            <Button variant="contained" color="primary" onClick={() => handleConfirmTurma(index)}>Confirmar</Button>
-            <Button variant="contained" color="secondary" onClick={() => handleRemoveTurma(index)}>Remover</Button>
-          </Box>
-        </Paper>
-      </Box>
-    );
+
+  const handleTimeChange = (index, time, type) => {
+    const newTurmas = [...turmas];
+    newTurmas[index][type] = time;
+    setTurmas(newTurmas);
   };
+  
+  const renderTurma = (turma, index) => (
+    <Box key={index} mb={2} width="100%">
+      <Paper elevation={3} style={{ padding: '20px', backgroundColor: darkMode ? '#333' : '#fff', color: darkMode ? '#fff' : '#333', display: 'flex', flexDirection: 'column', gap: '20px', marginLeft: '-15px', marginRight: '-15px' }}>
+        <Typography variant="h6" gutterBottom>Turma {index + 1}</Typography>
+        <Stack direction="row" spacing={2}>
+          {inputFieldsTurma.map(field => (
+            <FormControl key={field.name} fullWidth>
+              {field.type === 'checkbox' ? (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name={field.name}
+                      checked={turma[field.name] || false}
+                      onChange={e => handleTurmaChange(index, e)}
+                    />
+                  }
+                  label={field.label}
+                />
+              ) : field.type === 'select' ? (
+                <>
+                  <InputLabel id={`${field.name}-label-${index}`}>{field.label}</InputLabel>
+                  <Select
+                    labelId={`${field.name}-label-${index}`}
+                    name={field.name}
+                    value={turma[field.name] || ''}
+                    label={field.label}
+                    onChange={e => handleTurmaChange(index, e)}
+                  >
+                    {field.options.map(option => (
+                      <MenuItem key={option} value={option}>{option}</MenuItem>
+                    ))}
+                  </Select>
+                </>
+              ) : field.type === 'timepicker' ? (
+                <TimePicker
+                  selectedTime={turma[field.name]}
+                  setSelectedTime={(time) => handleTimeChange(index, time, field.name)}
+                  placeholder={field.label}
+                  filterTime={turma.horarioFilter}
+                   // Estilos diretamente no retorno JSX// Corrigido para usar horarioFilter da turma
+                />
+              ) : (
+                <TextField
+                  name={field.name}
+                  label={field.label}
+                  variant="outlined"
+                  fullWidth
+                  value={turma[field.name] || ''}
+                  onChange={e => handleTurmaChange(index, e)}
+                  type={field.type}
+                  InputProps={field.inputProps}
+                />
+              )}
+            </FormControl>
+          ))}
+        </Stack>
+        <Box alignSelf="flex-end">
+          <Button variant="contained" color="secondary" onClick={() => handleRemoveTurma(index)}>Remover</Button>
+        </Box>
+      </Paper>
+    </Box>
+  );
+
+  const TimePicker = ({ selectedTime, setSelectedTime, placeholder, filterTime }) => (
+    <div style={{ margin: '0 10px' }}> 
+      <DatePicker
+        selected={selectedTime}
+        onChange={setSelectedTime}
+        showTimeSelect
+        showTimeSelectOnly
+        timeIntervals={15}
+        timeCaption="Time"
+        dateFormat="h:mm aa"
+        placeholderText={placeholder}
+        minTime={filterTime && filterTime.start ? filterTime.start : setHours(setMinutes(new Date(), 0), 0)}
+        maxTime={filterTime && filterTime.end ? filterTime.end : setHours(setMinutes(new Date(), 0), 23)}
+        customInput={(
+          <input
+            type="text"
+            value={selectedTime ? selectedTime.toLocaleTimeString('pt-BR', { hour: 'numeric', minute: '2-digit' }) : ''}
+            placeholder={placeholder}
+            readOnly
+            style={{
+              width: '100%',
+              padding: '0.5rem',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              backgroundColor: '#fff',
+              color: '#333',
+              fontSize: '16px',
+              lineHeight: '1.5',
+              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+              transition: 'border-color 0.2s, box-shadow 0.2s',
+            }}
+          />
+        )}
+      />
+    </div>
+  );
+  
+  
+  
+  
 
   const inputFieldsSala = [
     { label: 'Nome da Sala', name: 'nome', type: 'text' },
     { label: 'Bloco', name: 'bloco', type: 'text' },
     { label: 'Capacidade', name: 'capacidade', type: 'number', inputProps: { min: 0 } },
     { label: 'Ambiente', name: 'ambiente', type: 'select', options: ['Sala Comum', 'Laboratório'] },
-    { label: 'Disciplina', name: 'nomeDisciplina', type: 'select', options: ['Cálculo I', 'Engenharia de Software'] },
     { label: 'Ar Condicionado', name: 'ar', type: 'checkbox' },
     { label: 'Ventilador', name: 'ventilador', type: 'checkbox' },
     { label: 'Quadro Giz', name: 'quadroGiz', type: 'checkbox' },
@@ -233,9 +412,30 @@ function App() {
   const inputFieldsTurma = [
     { label: 'Quantidade de Alunos', name: 'qtdAlunos', type: 'number', inputProps: { min: 0 } },
     { label: 'Período', name: 'periodo', type: 'number', inputProps: { min: 0 } },
-    { label: 'Disciplina', name: 'nomeDisciplina', type: 'text' },
-    { label: 'Horário', name: 'horario', type: 'text' },
-    { label: 'Curso', name: 'curso', type: 'text' }
+    { label: 'Curso', name: 'nomeCurso', type: 'text' },
+    { label: 'Disciplina', name: 'disciplinaNome', type: 'text' },
+    { label: 'Ambiente adequado', name: 'ambienteSalaAdequado', type: 'select', options: ['Sala Comum', 'Laboratório'] },
+    { label: 'Turno', name: 'turno', type: 'select', options: [
+      'Matutino',
+      'Vespertino',
+      'Noturno'
+    ] },
+    { label: 'Horário de Início', name: 'horarioInicio', type: 'timepicker' },
+    { label: 'Horário de Fim', name: 'horarioFim', type: 'timepicker' },
+    { label: 'Dia da semana', name: 'diaSemana', type: 'select', 
+    options: [
+      'Segunda',
+      'Terça',
+      'Quarta',
+      'Quinta',
+      'Sexta',
+      'Sábado',
+    ] },
+    { label: 'Ar Condicionado', name: 'ar', type: 'checkbox' },
+    { label: 'Ventilador', name: 'ventilador', type: 'checkbox' },
+    { label: 'Quadro Giz', name: 'quadroGiz', type: 'checkbox' },
+    { label: 'Quadro Branco', name: 'quadroBranco', type: 'checkbox' },
+    { label: 'Quadro de Vidro', name: 'quadroVidro', type: 'checkbox' }
   ];
 
   // Tema claro e escuro personalizado
@@ -257,56 +457,12 @@ function App() {
     },
   });
 
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = (e) => {
-      const data = new Uint8Array(e.target.result);
-      const workbook = XLSX.read(data, { type: 'array' });
-      const sheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-
-      // Aqui você pode processar jsonData para extrair salas e turmas
-      // Exemplo:
-      const newSalas = [];
-      const newTurmas = [];
-
-      // Lógica para extrair dados do arquivo Excel (jsonData) e adicionar às salas e turmas
-      jsonData.forEach((row) => {
-        const [salaName, turmaName] = row;
-        if (salaName && turmaName) {
-          newSalas.push({ name: salaName });
-          newTurmas.push({ name: turmaName });
-        }
-      });
-
-      // Atualiza o estado com as novas salas e turmas extraídas do arquivo Excel
-      setSalas([...salas, ...newSalas]);
-      setTurmas([...turmas, ...newTurmas]);
-    };
-
-    reader.readAsArrayBuffer(file);
-  };
-
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
-      <Box
-        sx={{
-          backgroundColor: darkMode ? '#333' : '#fff',
-          minHeight: '100vh',
-          transition: 'background-color 0.3s, color 0.3s',
-          paddingTop: '2rem',
-          backgroundImage: `url(${backgroundImage})`,
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
-        }}
-      >
+      <Box sx={{ backgroundColor: darkMode ? '#333' : '#fff', minHeight: '100vh', transition: 'background-color 0.3s, color 0.3s', paddingTop: '2rem' }}>
         <Container maxWidth={false}>
           <Box mb={2} textAlign="center">
-            <Typography variant="h4" gutterBottom sx={{ color: darkMode ? '#fff' : '#fff' }}>
+            <Typography variant="h4" gutterBottom>
               Alocação de salas e turmas
             </Typography>
           </Box>
@@ -326,20 +482,6 @@ function App() {
                 Adicionar Turma
               </Button>
             </Box>
-            <Box display="inline-block" mx={1}>
-              <label htmlFor="upload-file">
-                <Button variant="contained" color="primary" component="span">
-                  Receber Excel
-                </Button>
-                <input
-                  id="upload-file"
-                  type="file"
-                  accept=".xlsx,.xls"
-                  onChange={handleFileUpload}
-                  style={{ display: 'none' }}
-                />
-              </label>
-            </Box>
           </Box>
           <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between">
             {salas.map((sala, index) => renderSala(sala, index))}
@@ -348,9 +490,12 @@ function App() {
             {turmas.map((turma, index) => renderTurma(turma, index))}
           </Box>
         </Container>
+          <Box textAlign="center" mx={1}>
+            <Button variant="contained" color="primary" onClick={() => handleConfirmJson()}>Gerar planilha</Button>
+          </Box>
       </Box>
     </ThemeProvider>
   );
-};
+}
 
 export default App;
