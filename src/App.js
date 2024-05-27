@@ -44,14 +44,20 @@ function App() {
   };
 
   const handleTurmaChange = (index, e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     const newTurmas = [...turmas];
-    newTurmas[index] = { ...newTurmas[index], [name]: value };
   
+    // Verifica se o evento é de checkbox
+    let newValue = (type === 'checkbox') ? checked : value;
+  
+    // Atualiza a turma de acordo com o nome do campo
+    newTurmas[index] = { ...newTurmas[index], [name]: newValue };
+  
+    // Verifica se o campo é turno para atualizar horários
     if (name === 'turno') {
       let horarioInicio, horarioFim;
       let filterTime = {};
-      switch (value) {
+      switch (newValue) {
         case 'Matutino':
           horarioInicio = setHours(setMinutes(new Date(), 0), 7);
           horarioFim = setHours(setMinutes(new Date(), 0), 12);
@@ -79,11 +85,13 @@ function App() {
         default:
           break;
       }
+      // Atualiza os horários da turma
       newTurmas[index].horarioInicio = horarioInicio;
       newTurmas[index].horarioFim = horarioFim;
       newTurmas[index].horarioFilter = filterTime;
     }
   
+    // Define o estado das turmas
     setTurmas(newTurmas);
   };
   
