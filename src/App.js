@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Container, Typography, Box, Paper, Select, MenuItem, InputLabel, FormControl, Checkbox, FormControlLabel, createTheme, ThemeProvider, Stack } from '@mui/material';
+import { TextField, Button, Container, Typography, Box, Paper, Select, MenuItem, InputLabel, FormControl, Checkbox, FormControlLabel, createTheme, ThemeProvider, Stack, Grid } from '@mui/material';
 import $ from 'jquery';
 import { writeFileXLSX, utils } from "xlsx";
 import DatePicker from 'react-datepicker';
@@ -191,8 +191,8 @@ function App() {
 
   const renderSala = (sala, index) => {
     return (
-      <Box key={index} mb={2} width="100%">
-        <Paper elevation={3} style={{ padding: '20px', backgroundColor: darkMode ? '#333' : '#fff', color: darkMode ? '#fff' : '#333', display: 'flex', flexDirection: 'column', gap: '20px', marginLeft: '-15px', marginRight: '-15px' }}>
+      <Box key={index} mb={2} width="46vw">
+        <Paper elevation={3} style={{ padding: '20px', backgroundColor: darkMode ? '#333' : '#fff', color: darkMode ? '#fff' : '#333', display: 'flex', flexDirection: 'column', gap: '20px'}}>
           <Typography variant="h6" gutterBottom>Sala {index + 1}</Typography>
           <Stack direction="row" spacing={2}>
             {inputFieldsSala.map(field => (
@@ -254,9 +254,9 @@ function App() {
   };
   
   const renderTurma = (turma, index) => (
-    <Box key={index} mb={2} width="100%">
-      <Paper elevation={3} style={{ padding: '20px', backgroundColor: darkMode ? '#333' : '#fff', color: darkMode ? '#fff' : '#333', display: 'flex', flexDirection: 'column', gap: '20px', marginLeft: '-15px', marginRight: '-15px' }}>
-        <Typography variant="h6" gutterBottom>Turma {index + 1}</Typography>
+    <Box key={index} mb={2} width="46vw">
+      <Paper elevation={3} style={{ padding: '20px', backgroundColor: darkMode ? '#333' : '#fff', color: darkMode ? '#fff' : '#333', display: 'flex', flexDirection: 'column', gap: '20px' }}>        <Typography variant="h6" gutterBottom>Turma {index + 1}</Typography>
+      
         <Stack direction="row" spacing={2}>
           {inputFieldsTurma.map(field => (
             <FormControl key={field.name} fullWidth>
@@ -444,7 +444,7 @@ function App() {
           <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between">
             {salas.map((sala, index) => renderSala(sala, index))}
           </Box>
-          <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between">
+          <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="flex-end">
             {turmas.map((turma, index) => renderTurma(turma, index))}
           </Box>
         </Container>
