@@ -62,8 +62,7 @@ function App() {
     salasList.forEach((sala, index) => {
       sala.ar = (sala.ar === true) ? 1 : 0;
       sala.ventilador = (sala.ventilador === true) ? 1 : 0;
-      sala.quadroBranco = (sala.quadroBranco === true) ? 1 : 0;
-      sala.quadroGiz = (sala.quadroGiz === true) ? 1 : 0;
+      sala.projetor = (sala.projetor === true) ? 1 : 0;
       sala.quadroVidro = (sala.quadroVidro === true) ? 1 : 0;
       salasJson.push(
         {
@@ -72,8 +71,7 @@ function App() {
           ar: sala.ar,
           ventilador: sala.ventilador,
           capacidade: sala.capacidade,
-          quadroGiz: sala.quadroGiz,
-          quadroBranco: sala.quadroBranco,
+          projetor: sala.projetor,
           quadroVidro: sala.quadroVidro,
           bloco: sala.bloco
         }
@@ -84,19 +82,16 @@ function App() {
     turmasList.forEach((turma, index) => {
       var recursos = [];
       if (turma.ar === true) {
-        recursos.push('Ar Condicionado');
+        recursos.push('ar');
       }
       if (turma.ventilador === true) {
-        recursos.push('Ventilador');
+        recursos.push('ventilador');
       }
-      if (turma.quadroBranco === true) {
-        recursos.push('Quandro Branco');
-      }
-      if (turma.quadroGiz === true) {
-        recursos.push('Quadro Giz');
+      if (turma.projetor === true) {
+        recursos.push('projetor');
       }
       if (turma.quadroVidro === true) {
-        recursos.push('Quadro Vidro');
+        recursos.push('quadroVidro');
       }
       turmasJson.push(
         {
@@ -158,8 +153,7 @@ function App() {
       ar: false,
       ventilador: false,
       capacidade: 0,
-      quadroGiz: false,
-      quadroBranco: false,
+      projetor: false,
       quadroVidro: false,
       bloco: '',
     }]);
@@ -177,8 +171,7 @@ function App() {
       nomeCurso: "",
       ventilador: false,
       capacidade: 0,
-      quadroGiz: false,
-      quadroBranco: false,
+      projetor: false,
       quadroVidro: false,
       ar: false,
     }]);
@@ -371,8 +364,7 @@ function App() {
     { label: 'Ambiente', name: 'ambiente', type: 'select', options: ['Sala Comum', 'Laboratório'] },
     { label: 'Ar Condicionado', name: 'ar', type: 'checkbox' },
     { label: 'Ventilador', name: 'ventilador', type: 'checkbox' },
-    { label: 'Quadro Giz', name: 'quadroGiz', type: 'checkbox' },
-    { label: 'Quadro Branco', name: 'quadroBranco', type: 'checkbox' },
+    { label: 'Projetor', name: 'projetor', type: 'checkbox' },
     { label: 'Quadro de Vidro', name: 'quadroVidro', type: 'checkbox' },
   ];
 
@@ -400,8 +392,7 @@ function App() {
     ] },
     { label: 'Ar Condicionado', name: 'ar', type: 'checkbox' },
     { label: 'Ventilador', name: 'ventilador', type: 'checkbox' },
-    { label: 'Quadro Giz', name: 'quadroGiz', type: 'checkbox' },
-    { label: 'Quadro Branco', name: 'quadroBranco', type: 'checkbox' },
+    { label: 'Projetor', name: 'projetor', type: 'checkbox' },
     { label: 'Quadro de Vidro', name: 'quadroVidro', type: 'checkbox' }
   ];
 
