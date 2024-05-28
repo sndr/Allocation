@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Container, Typography, Box, Paper, Select, MenuItem, InputLabel, FormControl, Checkbox, FormControlLabel, createTheme, ThemeProvider, Stack } from '@mui/material';
 import $ from 'jquery';
-import '../src/App.css';
 import { writeFileXLSX, utils } from "xlsx";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { setHours, setMinutes } from 'date-fns';
+import { setHours, setMinutes, format } from 'date-fns';
 
 function App() {
   const [salas, setSalas] = useState([]);
@@ -47,51 +46,10 @@ function App() {
     const { name, value, type, checked } = e.target;
     const newTurmas = [...turmas];
   
-    // Verifica se o evento é de checkbox
     let newValue = (type === 'checkbox') ? checked : value;
   
-    // Atualiza a turma de acordo com o nome do campo
     newTurmas[index] = { ...newTurmas[index], [name]: newValue };
   
-    // Verifica se o campo é turno para atualizar horários
-    if (name === 'turno') {
-      let horarioInicio, horarioFim;
-      let filterTime = {};
-      switch (newValue) {
-        case 'Matutino':
-          horarioInicio = setHours(setMinutes(new Date(), 0), 7);
-          horarioFim = setHours(setMinutes(new Date(), 0), 12);
-          filterTime = {
-            start: setHours(setMinutes(new Date(), 0), 7),
-            end: setHours(setMinutes(new Date(), 0), 12)
-          };
-          break;
-        case 'Vespertino':
-          horarioInicio = setHours(setMinutes(new Date(), 0), 13);
-          horarioFim = setHours(setMinutes(new Date(), 0), 17);
-          filterTime = {
-            start: setHours(setMinutes(new Date(), 0), 13),
-            end: setHours(setMinutes(new Date(), 0), 17)
-          };
-          break;
-        case 'Noturno':
-          horarioInicio = setHours(setMinutes(new Date(), 0), 18);
-          horarioFim = setHours(setMinutes(new Date(), 0), 22);
-          filterTime = {
-            start: setHours(setMinutes(new Date(), 0), 18),
-            end: setHours(setMinutes(new Date(), 0), 22)
-          };
-          break;
-        default:
-          break;
-      }
-      // Atualiza os horários da turma
-      newTurmas[index].horarioInicio = horarioInicio;
-      newTurmas[index].horarioFim = horarioFim;
-      newTurmas[index].horarioFilter = filterTime;
-    }
-  
-    // Define o estado das turmas
     setTurmas(newTurmas);
   };
   
@@ -150,7 +108,8 @@ function App() {
             ambienteSalaAdequado: turma.ambienteSalaAdequado,
           },
           horario: {
-            horario: turma.horario,
+            inicio: format(turma.horarioInicio, 'HH:mm'),
+            fim: format(turma.horarioFim, 'HH:mm'),
             diaSemana: turma.diaSemana,
             turno: turma.turno,
           },
@@ -212,8 +171,8 @@ function App() {
       periodo: 0,
       disciplinaNome: "",
       ambienteSalaAdequado: "",
-      horario: "",
-      diaSemana: "",
+      horarioInicio: "",
+      horarioFim: "",
       turno: "",
       nomeCurso: "",
       ventilador: false,
@@ -340,7 +299,6 @@ function App() {
                   setSelectedTime={(time) => handleTimeChange(index, time, field.name)}
                   placeholder={field.label}
                   filterTime={turma.horarioFilter}
-                   // Estilos diretamente no retorno JSX// Corrigido para usar horarioFilter da turma
                 />
               ) : (
                 <TextField
@@ -371,16 +329,17 @@ function App() {
         onChange={setSelectedTime}
         showTimeSelect
         showTimeSelectOnly
-        timeIntervals={15}
+        timeIntervals={5}
         timeCaption="Time"
-        dateFormat="h:mm aa"
+        dateFormat="HH:mm"
+        timeFormat="HH:mm"
         placeholderText={placeholder}
-        minTime={filterTime && filterTime.start ? filterTime.start : setHours(setMinutes(new Date(), 0), 0)}
-        maxTime={filterTime && filterTime.end ? filterTime.end : setHours(setMinutes(new Date(), 0), 23)}
+        minTime={setHours(setMinutes(new Date(), 0), 0)}
+        maxTime={setHours(setMinutes(new Date(), 59), 23)}
         customInput={(
           <input
             type="text"
-            value={selectedTime ? selectedTime.toLocaleTimeString('pt-BR', { hour: 'numeric', minute: '2-digit' }) : ''}
+            value={selectedTime}
             placeholder={placeholder}
             readOnly
             style={{
