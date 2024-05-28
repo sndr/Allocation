@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Container, Typography, Box, Paper, Select, MenuItem, InputLabel, FormControl, Checkbox, FormControlLabel, createTheme, ThemeProvider, Stack } from '@mui/material';
+import { TextField, Button, Container, Typography, Box, Paper, Select, MenuItem, InputLabel, FormControl, Checkbox, FormControlLabel, createTheme, ThemeProvider, Stack} from '@mui/material';
 import $ from 'jquery';
 import { writeFileXLSX, utils } from "xlsx";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { setHours, setMinutes, format } from 'date-fns';
+import Logo_Pas from '../src/Logo_Pas2.png'
+import Background_ from '../src/background_.jpg'
+import '../src/App.css'
 
 function App() {
   const [salas, setSalas] = useState([]);
@@ -53,7 +56,6 @@ function App() {
     setTurmas(newTurmas);
   };
   
-
   const handleConfirmJson = () => {
     const salasList = salas;
     const turmasList = turmas;
@@ -191,52 +193,86 @@ function App() {
 
   const renderSala = (sala, index) => {
     return (
-      <Box key={index} mb={2} width="100%">
-        <Paper elevation={3} style={{ padding: '20px', backgroundColor: darkMode ? '#333' : '#fff', color: darkMode ? '#fff' : '#333', display: 'flex', flexDirection: 'column', gap: '20px', marginLeft: '-15px', marginRight: '-15px' }}>
-          <Typography variant="h6" gutterBottom>Sala {index + 1}</Typography>
-          <Stack direction="row" spacing={2}>
-            {inputFieldsSala.map(field => (
-              <FormControl key={field.name} fullWidth>
-                {field.type === 'checkbox' ? (
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        name={field.name}
-                        checked={sala[field.name] || false}
-                        onChange={e => handleSalaChange(index, e)}
-                      />
-                    }
-                    label={field.label}
-                  />
-                ) : field.type === 'select' ? (
-                  <>
-                    <InputLabel id={`${field.name}-label-${index}`}>{field.label}</InputLabel>
-                    <Select
-                      labelId={`${field.name}-label-${index}`}
-                      name={field.name}
-                      value={sala[field.name] || ''}
+      <Box key={index} mb={2} width="47vw">
+        <Paper elevation={3} style={{ padding: '20px', backgroundColor: darkMode ? '#333' : '#fff', color: darkMode ? '#fff' : '#333', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <Typography variant="h5" gutterBottom textAlign={'center'} className="comfortaa-text">Sala {index + 1}</Typography>
+          <Stack direction="column" spacing={2}>
+            <Stack direction="row" spacing={2}>
+              {inputFieldsSala.filter(field => field.type === 'checkbox' || field.type === 'timepicker').map(field => (
+                <FormControl key={field.name} fullWidth>
+                  {field.type === 'checkbox' ? (
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          name={field.name}
+                          checked={sala[field.name] || false}
+                          onChange={e => handleSalaChange(index, e)}
+                        />
+                      }
                       label={field.label}
-                      onChange={e => handleSalaChange(index, e)}
-                    >
-                      {field.options.map(option => (
-                        <MenuItem key={option} value={option}>{option}</MenuItem>
-                      ))}
-                    </Select>
-                  </>
-                ) : (
-                  <TextField
-                    name={field.name}
-                    label={field.label}
-                    variant="outlined"
-                    fullWidth
-                    value={sala[field.name] || ''}
-                    onChange={e => handleSalaChange(index, e)}
-                    type={field.type}
-                    InputProps={field.inputProps}
-                  />
-                )}
-              </FormControl>
-            ))}
+                    />
+                  ) : (
+                    <TimePicker
+                      selectedTime={sala[field.name]}
+                      setSelectedTime={(time) => handleTimeChange(index, time, field.name)}
+                      placeholder={field.label}
+                      filterTime={sala.horarioFilter}
+                    />
+                  )}
+                </FormControl>
+              ))}
+            </Stack>
+            <Stack direction="row" spacing={2}>
+              {inputFieldsSala.filter(field => field.type !== 'checkbox' && field.type !== 'timepicker').map(field => (
+                <FormControl key={field.name} fullWidth>
+                  {field.type === 'select' ? (
+                    <>
+                      <InputLabel id={`${field.name}-label-${index}`}>{field.label}</InputLabel>
+                      <Select
+                        labelId={`${field.name}-label-${index}`}
+                        name={field.name}
+                        value={sala[field.name] || ''}
+                        label={field.label}
+                        onChange={e => handleSalaChange(index, e)}
+                      >
+                        {field.options.map(option => (
+                          <MenuItem key={option} value={option}>{option}</MenuItem>
+                        ))}
+                      </Select>
+                    </>
+                  ) : (
+                    field.type === 'number' ? (
+                      <TextField
+                        name={field.name}
+                        label={field.label}
+                        variant="outlined"
+                        fullWidth
+                        value={sala[field.name] || ''}
+                        onChange={(e) => {
+                          const value = parseInt(e.target.value);
+                          if (!isNaN(value) && value >= 0) {
+                            handleSalaChange(index, e);
+                          }
+                        }}
+                        type={field.type}
+                        InputProps={field.inputProps}
+                      />
+                    ) : (
+                      <TextField
+                        name={field.name}
+                        label={field.label}
+                        variant="outlined"
+                        fullWidth
+                        value={sala[field.name] || ''}
+                        onChange={e => handleSalaChange(index, e)}
+                        type={field.type}
+                        InputProps={field.inputProps}
+                      />
+                    )
+                  )}
+                </FormControl>
+              ))}
+            </Stack>
           </Stack>
           <Box alignSelf="flex-end">
             <Button variant="contained" color="secondary" onClick={() => handleRemoveSala(index)}>Remover</Button>
@@ -245,8 +281,7 @@ function App() {
       </Box>
     );
   };
-
-
+  
   const handleTimeChange = (index, time, type) => {
     const newTurmas = [...turmas];
     newTurmas[index][type] = time;
@@ -254,59 +289,86 @@ function App() {
   };
   
   const renderTurma = (turma, index) => (
-    <Box key={index} mb={2} width="100%">
-      <Paper elevation={3} style={{ padding: '20px', backgroundColor: darkMode ? '#333' : '#fff', color: darkMode ? '#fff' : '#333', display: 'flex', flexDirection: 'column', gap: '20px', marginLeft: '-15px', marginRight: '-15px' }}>
-        <Typography variant="h6" gutterBottom>Turma {index + 1}</Typography>
-        <Stack direction="row" spacing={2}>
-          {inputFieldsTurma.map(field => (
-            <FormControl key={field.name} fullWidth>
-              {field.type === 'checkbox' ? (
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      name={field.name}
-                      checked={turma[field.name] || false}
-                      onChange={e => handleTurmaChange(index, e)}
-                    />
-                  }
-                  label={field.label}
-                />
-              ) : field.type === 'select' ? (
-                <>
-                  <InputLabel id={`${field.name}-label-${index}`}>{field.label}</InputLabel>
-                  <Select
-                    labelId={`${field.name}-label-${index}`}
-                    name={field.name}
-                    value={turma[field.name] || ''}
+    <Box key={index} mb={2} width="47vw">
+      <Paper elevation={3} style={{ padding: '20px', backgroundColor: darkMode ? '#333' : '#fff', color: darkMode ? '#fff' : '#333', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <Typography variant="h5" gutterBottom textAlign={'center'} className="comfortaa-text">Turma {index + 1}</Typography>
+        <Stack direction="column" spacing={2}>
+          <Stack direction="row" spacing={2}>
+            {inputFieldsTurma.filter(field => field.type === 'checkbox' || field.type === 'timepicker').map(field => (
+              <FormControl key={field.name} fullWidth>
+                {field.type === 'checkbox' ? (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        name={field.name}
+                        checked={turma[field.name] || false}
+                        onChange={e => handleTurmaChange(index, e)}
+                      />
+                    }
                     label={field.label}
-                    onChange={e => handleTurmaChange(index, e)}
-                  >
-                    {field.options.map(option => (
-                      <MenuItem key={option} value={option}>{option}</MenuItem>
-                    ))}
-                  </Select>
-                </>
-              ) : field.type === 'timepicker' ? (
-                <TimePicker
-                  selectedTime={turma[field.name]}
-                  setSelectedTime={(time) => handleTimeChange(index, time, field.name)}
-                  placeholder={field.label}
-                  filterTime={turma.horarioFilter}
-                />
-              ) : (
-                <TextField
-                  name={field.name}
-                  label={field.label}
-                  variant="outlined"
-                  fullWidth
-                  value={turma[field.name] || ''}
-                  onChange={e => handleTurmaChange(index, e)}
-                  type={field.type}
-                  InputProps={field.inputProps}
-                />
-              )}
-            </FormControl>
-          ))}
+                  />
+                ) : (
+                  <TimePicker
+                    selectedTime={turma[field.name]}
+                    setSelectedTime={(time) => handleTimeChange(index, time, field.name)}
+                    placeholder={field.label}
+                    filterTime={turma.horarioFilter}
+                  />
+                )}
+              </FormControl>
+            ))}
+          </Stack>
+          <Stack direction="row" spacing={2}>
+            {inputFieldsTurma.filter(field => field.type !== 'checkbox' && field.type !== 'timepicker').map(field => (
+              <FormControl key={field.name} fullWidth>
+                {field.type === 'select' ? (
+                  <>
+                    <InputLabel id={`${field.name}-label-${index}`}>{field.label}</InputLabel>
+                    <Select
+                      labelId={`${field.name}-label-${index}`}
+                      name={field.name}
+                      value={turma[field.name] || ''}
+                      label={field.label}
+                      onChange={e => handleTurmaChange(index, e)}
+                    >
+                      {field.options.map(option => (
+                        <MenuItem key={option} value={option}>{option}</MenuItem>
+                      ))}
+                    </Select>
+                  </>
+                ) : (
+                  field.type === 'number' ? (
+                    <TextField
+                      name={field.name}
+                      label={field.label}
+                      variant="outlined"
+                      fullWidth
+                      value={turma[field.name] || ''}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value);
+                        if (!isNaN(value) && value >= 0) {
+                          handleTurmaChange(index, e);
+                        }
+                      }}
+                      type={field.type}
+                      InputProps={field.inputProps}
+                    />
+                  ) : (
+                    <TextField
+                      name={field.name}
+                      label={field.label}
+                      variant="outlined"
+                      fullWidth
+                      value={turma[field.name] || ''}
+                      onChange={e => handleTurmaChange(index, e)}
+                      type={field.type}
+                      InputProps={field.inputProps}
+                    />
+                  )
+                )}
+              </FormControl>
+            ))}
+          </Stack>
         </Stack>
         <Box alignSelf="flex-end">
           <Button variant="contained" color="secondary" onClick={() => handleRemoveTurma(index)}>Remover</Button>
@@ -314,7 +376,7 @@ function App() {
       </Paper>
     </Box>
   );
-
+  
   const TimePicker = ({ selectedTime, setSelectedTime, placeholder, filterTime }) => (
     <div style={{ margin: '0 10px' }}> 
       <DatePicker
@@ -352,10 +414,6 @@ function App() {
       />
     </div>
   );
-  
-  
-  
-  
 
   const inputFieldsSala = [
     { label: 'Nome da Sala', name: 'nome', type: 'text' },
@@ -374,29 +432,17 @@ function App() {
     { label: 'Curso', name: 'nomeCurso', type: 'text' },
     { label: 'Disciplina', name: 'disciplinaNome', type: 'text' },
     { label: 'Ambiente adequado', name: 'ambienteSalaAdequado', type: 'select', options: ['Sala Comum', 'Laboratório'] },
-    { label: 'Turno', name: 'turno', type: 'select', options: [
-      'Matutino',
-      'Vespertino',
-      'Noturno'
-    ] },
+    { label: 'Turno', name: 'turno', type: 'select', options: ['Matutino','Vespertino', 'Noturno'] },
     { label: 'Horário de Início', name: 'horarioInicio', type: 'timepicker' },
     { label: 'Horário de Fim', name: 'horarioFim', type: 'timepicker' },
     { label: 'Dia da semana', name: 'diaSemana', type: 'select', 
-    options: [
-      'Segunda',
-      'Terça',
-      'Quarta',
-      'Quinta',
-      'Sexta',
-      'Sábado',
-    ] },
+    options: ['Segunda','Terça','Quarta','Quinta', 'Sexta', 'Sábado',] },
     { label: 'Ar Condicionado', name: 'ar', type: 'checkbox' },
     { label: 'Ventilador', name: 'ventilador', type: 'checkbox' },
     { label: 'Projetor', name: 'projetor', type: 'checkbox' },
     { label: 'Quadro de Vidro', name: 'quadroVidro', type: 'checkbox' }
   ];
 
-  // Tema claro e escuro personalizado
   const lightTheme = createTheme({
     palette: {
       mode: 'light',
@@ -414,43 +460,74 @@ function App() {
       },
     },
   });
+  
 
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
-      <Box sx={{ backgroundColor: darkMode ? '#333' : '#fff', minHeight: '100vh', transition: 'background-color 0.3s, color 0.3s', paddingTop: '2rem' }}>
+      <Box 
+        sx={{ 
+          backgroundImage: `url(${Background_})`, // Definindo a imagem de fundo
+          backgroundColor: darkMode ? '#333' : '#fff', 
+          minHeight: '100vh', 
+          transition: 'background-color 0.3s, color 0.3s', 
+          paddingTop: '2rem',
+          backgroundSize: 'cover', // Ajustando o tamanho da imagem de fundo
+          backgroundPosition: 'center', // Ajustando a posição da imagem de fundo
+          backgroundAttachment: 'fixed' // Mantendo a imagem de fundo fixa
+        }}
+      >
         <Container maxWidth={false}>
+          <img src={Logo_Pas} alt="Logo" style={{ position: 'absolute', top: 0, left: 1,  width: '15%', height: '140px',margin: 20 }} />
           <Box mb={2} textAlign="center">
-            <Typography variant="h4" gutterBottom>
-              Alocação de salas e turmas
-            </Typography>
+          <div>
+            <style>
+              {`
+                @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
+                .comfortaa-text {
+                  font-family: 'Comfortaa', sans-serif;
+                  font-optical-sizing: auto;
+                  font-weight: 1000; 
+                  font-style: normal;
+                }
+              `}
+            </style>
+          <Typography variant="h3" gutterBottom className="comfortaa-text" style={{ color:'#fff'}}>
+            Alocação de salas e turmas
+          </Typography>
+          </div>
           </Box>
           <Box mb={2} textAlign="center">
-            <Button variant="contained" color="primary" onClick={() => setDarkMode(prevMode => !prevMode)}>
-              {darkMode ? 'Modo Claro' : 'Modo Escuro'}
-            </Button>
+          <label className="switch">
+              <input type="checkbox" checked={darkMode} onChange={() => setDarkMode(prevMode => !prevMode)} />
+              <span className="slider"></span>
+              <Typography variant="button" className="comfortaa-text" style={{ color: darkMode ? '#fff' : '#000' }}>
+              </Typography>
+            </label>
           </Box>
           <Box mb={2} textAlign="center">
             <Box display="inline-block" mx={1}>
-              <Button variant="contained" color="primary" onClick={handleAddSala}>
-                Adicionar Sala
+              <Button className="comfortaa-text" variant="contained" color="primary" onClick={handleAddSala}>
+                Adicionar Sala ({salas.length})
               </Button>
             </Box>
             <Box display="inline-block" mx={1}>
-              <Button variant="contained" color="primary" onClick={handleAddTurma}>
-                Adicionar Turma
+              <Button className="comfortaa-text" variant="contained" color="primary" onClick={handleAddTurma}>
+                Adicionar Turma ({turmas.length})
               </Button>
             </Box>
           </Box>
-          <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between">
-            {salas.map((sala, index) => renderSala(sala, index))}
+          <Box display="flex" flexDirection="row" justifyContent="space-between">
+            <Box display="flex" flexDirection="column">
+              {salas.map((sala, index) => renderSala(sala, index))}
+            </Box>
+            <Box display="flex" flexDirection="column">
+              {turmas.map((turma, index) => renderTurma(turma, index))}
+            </Box>
           </Box>
-          <Box display="flex" flexDirection="row" flexWrap="wrap" justifyContent="space-between">
-            {turmas.map((turma, index) => renderTurma(turma, index))}
+          <Box textAlign="center" mx={1}>
+            <Button className="comfortaa-text" variant="contained" color="primary" onClick={() => handleConfirmJson()}>Gerar planilha</Button>
           </Box>
         </Container>
-          <Box textAlign="center" mx={1}>
-            <Button variant="contained" color="primary" onClick={() => handleConfirmJson()}>Gerar planilha</Button>
-          </Box>
       </Box>
     </ThemeProvider>
   );
