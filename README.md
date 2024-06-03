@@ -154,6 +154,42 @@ Se tiver alguma dúvida ou sugestão, sinta-se à vontade para abrir uma issue o
       <br />
     </td>
   </tr>
+   <td align="center">
+      <a href="https://github.com/Coluno">
+        <img src="https://avatars.githubusercontent.com/u/106896178?v=4" width="100px;" alt=""/>
+      </a>
+      <br />
+      <sub><b>Gabriel</b></sub>
+      <br />
+    </td>
+  </tr>
+   <td align="center">
+      <a href="https://github.com/Rafaelpbnc16">
+        <img src="https://avatars.githubusercontent.com/u/170088679?v=4" width="100px;" alt=""/>
+      </a>
+      <br />
+      <sub><b>Rafael</b></sub>
+      <br />
+    </td>
+  </tr>
+  <td align="center">
+      <a href="https://github.com/juliobrbsa">
+        <img src="https://avatars.githubusercontent.com/u/143511071?v=4" width="100px;" alt=""/>
+      </a>
+      <br />
+      <sub><b>Julio</b></sub>
+      <br />
+    </td>
+  </tr>
+  <td align="center">
+      <a href="https://github.com/gilberto450">
+        <img src="https://avatars.githubusercontent.com/u/144842238?v=4" width="100px;" alt=""/>
+      </a>
+      <br />
+      <sub><b>Gilberto</b></sub>
+      <br />
+    </td>
+  </tr>
 </table>
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
