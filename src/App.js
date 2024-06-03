@@ -877,7 +877,7 @@ function App() {
         }}
       >
         <Container maxWidth={false}>
-          <img src={Logo_Pas} alt="Logo" style={{ position: 'absolute', top: 0, left: 1,  width: '15%', height: '140px',margin: 20 }} />
+          <img src={Logo_Pas} alt="Logo" style={{ position: 'absolute', top: 0, left: 0,  width: '15%', height: '140px',margin: 20 }} />
           <Box mb={2} textAlign="center">
           <div>
             <style>
@@ -891,12 +891,12 @@ function App() {
                 }
               `}
             </style>
-          <Typography variant="h3" gutterBottom className="comfortaa-text" style={{ color:'#fff'}}>
+          <Typography variant="h4" ml={3.5} textAlign="center" gutterBottom className="comfortaa-text" style={{ color:'#fff'}}>
             Alocação de salas e turmas
           </Typography>
           </div>
           </Box>
-          <Box mb={2} textAlign="center">
+          <Box mb={2} ml={0.2} alignItems={'center'} justifyContent={'center'} textAlign={'center'}>
           <label className="switch">
               <input type="checkbox" checked={darkMode} onChange={() => setDarkMode(prevMode => !prevMode)} />
               <span className="slider"></span>
@@ -904,21 +904,21 @@ function App() {
               </Typography>
             </label>
           </Box>
-          <Box mb={2} textAlign="center">
-            <Box display="inline-block" mx={1}>
+          <Box mb={2} ml={4.3} alignItems={'center'} justifyContent={'center'} textAlign={'center'}>
+            <Box display="center-flex">
               <Button className="comfortaa-text" variant="contained" color="primary" onClick={handleAddSala}>
                 Adicionar Sala ({salas.length})
               </Button>
             </Box>
-            <Box display="inline-block" mx={1}>
+            <Box display="center-flex" mx={2}>
               <Button className="comfortaa-text" variant="contained" color="primary" onClick={handleAddTurma}>
                 Adicionar Turma ({turmas.length})
               </Button>
             </Box>
           </Box>
 
-          <Box mb={2} textAlign="center">
-            <Box display="inline-flex" mx={1}>
+          <Box mb={2} ml={6} alignItems={'center'} justifyContent={'center'} textAlign={'center'} >
+            <Box display="center-flex" >
               <Button variant="contained" color="success" onClick={() => handleBaixarModelo()}>Baixar modelo</Button>
               <Box mx={2} textAlign="center">
                 <Button
@@ -926,6 +926,7 @@ function App() {
                   variant="contained"
                   tabIndex={-1}
                   startIcon={<CloudUploadIcon />}
+                  display="center-flex"
                 >
                   Upload modelo
                   <VisuallyHiddenInput type="file" onChange={handleUploadModelo}/>
