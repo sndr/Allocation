@@ -34,10 +34,10 @@ Este projeto é uma aplicação web para gerenciar a alocação de salas e turma
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/nome-do-repositorio.git
+   git clone https://github.com/seu-usuario/Allocation.git
    
 2.Navegue até o diretório do projeto:
-   `cd nome-do-repositorio`
+   `cd Allocation`
    
 3.Instale as dependências:
   `npm install`
