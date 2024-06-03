@@ -76,8 +76,8 @@ Este projeto é uma aplicação web para gerenciar a alocação de salas e turma
   - Clique em "Remover" para excluir uma turma.
     
 7.Importar Excel
-  - Clique no botão "Receber Excel".
-  - Selecione um arquivo Excel.
+  - Clique no botão "Upload modelo".
+  - Selecione um arquivo xlsx.
   - Os dados do arquivo serão importados e novas salas e turmas serão adicionadas à lista.
     
 8.Alternar Tema
