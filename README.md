@@ -142,7 +142,6 @@ Se tiver alguma dúvida ou sugestão, sinta-se à vontade para abrir uma issue o
       <br />
       <sub><b>Marcus</b></sub>
       <br />
-  </tr>
   <td align="center">
       <a href="https://github.com/RhayaneFreitas">
         <img src="https://avatars.githubusercontent.com/u/134341915?v=4" width="100px;" alt=""/>
