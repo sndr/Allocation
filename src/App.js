@@ -61,13 +61,11 @@ function App() {
   };
 
   const handleTurmaChange = (index, e) => {
+
     const { name, value, type, checked } = e.target;
     const newTurmas = [...turmas];
-  
     let newValue = (type === 'checkbox') ? checked : value;
-  
     newTurmas[index] = { ...newTurmas[index], [name]: newValue };
-  
     setTurmas(newTurmas);
   };
   
@@ -170,7 +168,7 @@ function App() {
 
       for (let i = 0; i < data.length; i++) {
         if (isSala) {
-          if (i > 1 && data[i][0] != "TURMAS" && data[i][0] !== 'undefined') {
+          if (i > 1 && data[i][0] !== "TURMAS" && data[i][0] !== 'undefined') {
             salas.push({
               nome: data[i][0],
               ambiente: data[i][3],
@@ -183,7 +181,7 @@ function App() {
             });
           }
         } else {
-          if (data[i][0] != 'Quantidade' && data[i][0] !== 'undefined') {
+          if (data[i][0] !== 'Quantidade' && data[i][0] !== 'undefined') {
 
             var recursos = [];
             if (data[i][9] === 1) {
@@ -566,6 +564,7 @@ function App() {
       quadroVidro: false,
       ar: false,
     }]);
+    
     setIsGerarVisible(true);
   };
 
@@ -860,20 +859,19 @@ function App() {
       },
     },
   });
-  
 
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <Box 
         sx={{ 
-          backgroundImage: `url(${Background_})`, // Definindo a imagem de fundo
+          backgroundImage: `url(${Background_})`,
           backgroundColor: darkMode ? '#333' : '#fff', 
           minHeight: '100vh', 
           transition: 'background-color 0.3s, color 0.3s', 
           paddingTop: '2rem',
-          backgroundSize: 'cover', // Ajustando o tamanho da imagem de fundo
-          backgroundPosition: 'center', // Ajustando a posição da imagem de fundo
-          backgroundAttachment: 'fixed' // Mantendo a imagem de fundo fixa
+          backgroundSize: 'cover', 
+          backgroundPosition: 'center', 
+          backgroundAttachment: 'fixed' 
         }}
       >
         <Container maxWidth={false}>
