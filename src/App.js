@@ -230,7 +230,7 @@ function App() {
       };
   
       $.ajax({
-        url: 'http://localhost:8080/api/solucaoGulosa',
+        url: 'https://alocaai-api.onrender.com/api/solucaoGulosa',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(jsonCall),
