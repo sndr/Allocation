@@ -862,7 +862,7 @@ function App() {
     },
   });
   
-
+//Subindo atualizações2
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <Box 
