@@ -230,7 +230,7 @@ function App() {
       };
   
       $.ajax({
-        url: 'https://alocaai-api.onrender.com/api/solucaoGulosa',
+        url: process.env.REACT_APP_API_URL,
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(jsonCall),
