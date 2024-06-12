@@ -508,23 +508,206 @@ function App() {
     };
 
     $.ajax({
-      url: 'http://localhost:8080/api/solucaoGulosa',
+      url: process.env.REACT_APP_API_URL,
       method: 'POST',
       contentType: 'application/json',
       data: JSON.stringify(jsonCall),
       success: function(data) {
         const wb = utils.book_new();
 
-        const aulas = data.map(item => ({
-            Sala: item.sala.nome,
-            Disciplina: item.disciplina.nome,
-            Horario: `${item.horario.diaSemana} - ${item.horario.horario}`,
-            Curso: item.curso.nome
-        }));
+        const aulasPorSala = data.reduce((acc, item) => {
+          const salaNome = item.sala.nome;
+          if (!acc[salaNome]) {
+            acc[salaNome] = [];
+          }
+          acc[salaNome].push({
+            disciplina: item.disciplina.nome,
+            inicio: item.horario.inicio.slice(0, -3),
+            fim: item.horario.fim.slice(0, -3),
+            diaDaSemana: item.horario.diaSemana,
+            curso: item.curso.nome
+          });
+          return acc;
+        }, {});
 
-        const ws = utils.json_to_sheet(aulas);
+        for (let salaNome in aulasPorSala) {
+          aulasPorSala[salaNome].sort((a, b) => {
+            const inicioA = new Date(`1970/01/01 ${a.inicio}`);
+            const inicioB = new Date(`1970/01/01 ${b.inicio}`);
+            return inicioA - inicioB;
+          });
+        }
+
+        var planilhaExport = [];
+        var merges = [];
+        var contador = 0;
+        for (let salaNome in aulasPorSala) {
+          var salaHeader = ["SALA - " + salaNome];
+          var salaInfos = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
+          planilhaExport.push(salaHeader)
+          planilhaExport.push(salaInfos)
+          merges.push({ s: { r: contador, c: 0 }, e: { r: contador, c: 6 } })
+          contador += 10
+          var horarioInfo1 = ["", "", "", "", "", "", ""];
+          var horarioInfo2 = ["", "", "", "", "", "", ""];
+          var horarioInfo3 = ["", "", "", "", "", "", ""];
+          var horarioInfo4 = ["", "", "", "", "", "", ""];
+          var horarioInfo5 = ["", "", "", "", "", "", ""];
+          var horarioInfo6 = ["", "", "", "", "", "", ""];
+          for (let turma in aulasPorSala[salaNome]) {
+            if (aulasPorSala[salaNome][turma]['diaDaSemana'] === "Segunda") {
+              if(horarioInfo1[0] === "") {
+                horarioInfo1[0] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo2[0] === "") {
+                horarioInfo2[0] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo3[0] === "") {
+                horarioInfo3[0] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo4[0] === "") {
+                horarioInfo4[0] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo5[0] === "") {
+                horarioInfo5[0] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo6[0] === "") {
+                horarioInfo6[0] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              }
+            }
+            if (aulasPorSala[salaNome][turma]['diaDaSemana'] === "Terça") {
+              if(horarioInfo1[1] === "") {
+                horarioInfo1[1] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo2[1] === "") {
+                horarioInfo2[1] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo3[1] === "") {
+                horarioInfo3[1] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo4[1] === "") {
+                horarioInfo4[1] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo5[1] === "") {
+                horarioInfo5[1] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo6[1] === "") {
+                horarioInfo6[1] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              }
+            }
+            if (aulasPorSala[salaNome][turma]['diaDaSemana'] === "Quarta") {
+              if(horarioInfo1[2] === "") {
+                horarioInfo1[2] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo2[2] === "") {
+                horarioInfo2[2] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo3[2] === "") {
+                horarioInfo3[2] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo4[2] === "") {
+                horarioInfo4[2] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo5[2] === "") {
+                horarioInfo5[2] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo6[2] === "") {
+                horarioInfo6[2] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              }
+            }
+            if (aulasPorSala[salaNome][turma]['diaDaSemana'] === "Quinta") {
+              if(horarioInfo1[3] === "") {
+                horarioInfo1[3] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo2[3] === "") {
+                horarioInfo2[3] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo3[3] === "") {
+                horarioInfo3[3] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo4[3] === "") {
+                horarioInfo4[3] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo5[3] === "") {
+                horarioInfo5[3] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo6[3] === "") {
+                horarioInfo6[3] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              }
+            }
+            if (aulasPorSala[salaNome][turma]['diaDaSemana'] === "Sexta") {
+              if(horarioInfo1[4] === "") {
+                horarioInfo1[4] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo2[4] === "") {
+                horarioInfo2[4] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo3[4] === "") {
+                horarioInfo3[4] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo4[4] === "") {
+                horarioInfo4[4] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo5[4] === "") {
+                horarioInfo5[4] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo6[4] === "") {
+                horarioInfo6[4] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              }
+            }
+            if (aulasPorSala[salaNome][turma]['diaDaSemana'] === "Sábado") {
+              if(horarioInfo1[5] === "") {
+                horarioInfo1[5] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo2[5] === "") {
+                horarioInfo2[5] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo3[5] === "") {
+                horarioInfo3[5] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo4[5] === "") {
+                horarioInfo4[5] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo5[5] === "") {
+                horarioInfo5[5] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo6[5] === "") {
+                horarioInfo6[5] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              }
+            }
+            if (aulasPorSala[salaNome][turma]['diaDaSemana'] === "Domingo") {
+              if(horarioInfo1[6] === "") {
+                horarioInfo1[6] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo2[6] === "") {
+                horarioInfo2[6] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo3[6] === "") {
+                horarioInfo3[6] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo4[6] === "") {
+                horarioInfo4[6] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo5[6] === "") {
+                horarioInfo5[6] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              } else if (horarioInfo6[6] === "") {
+                horarioInfo6[6] = aulasPorSala[salaNome][turma]['disciplina'] + "\n" + aulasPorSala[salaNome][turma]['curso'] + "\n" + aulasPorSala[salaNome][turma]['inicio'] + " - " + aulasPorSala[salaNome][turma]['fim'];
+              }
+            }
+          }
+
+          planilhaExport.push(horarioInfo1);
+          planilhaExport.push(horarioInfo2);
+          planilhaExport.push(horarioInfo3);
+          planilhaExport.push(horarioInfo4);
+          planilhaExport.push(horarioInfo5);
+          planilhaExport.push(horarioInfo6);
+
+          const linhasVazias = new Array(2).fill([]);
+
+          planilhaExport.push(...linhasVazias);
+
+        }
+
+        var ws = utils.json_to_sheet(planilhaExport, { skipHeader: true });
+
+        ws['!merges'] = merges;
+
+        const cellStyle = {
+          alignment: { horizontal: 'center', vertical: 'center' },
+          border: {
+            top: { style: 'thin' },
+            bottom: { style: 'thin' },
+            left: { style: 'thin' },
+            right: { style: 'thin' }
+          }
+        };
+
+        Object.keys(ws).forEach(cell => {
+          if (cell[0] === '!') return;
+          ws[cell].s = cellStyle;
+          var celula = ws[cell].v;
+          if (celula === "Segunda" ||
+              celula === "Terça" ||
+              celula === "Quarta" ||
+              celula === "Quinta" ||
+              celula === "Sexta" ||
+              celula === "Sábado" ||
+              celula === "Domingo" ||
+              (celula && celula.includes("SALA"))
+          ) {
+            ws[cell].s = {...ws[cell].s, font: { bold: true } };
+          }
+        });
+
         utils.book_append_sheet(wb, ws, "Horarios");
-        writeFileXLSX(wb, "Horarios.xlsx");
+        writeFile(wb, "Horarios.xlsx");
       },
       error: function(error) {
         console.error('Erro ao realizar a solicitação:', error);
