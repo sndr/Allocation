@@ -544,6 +544,7 @@ function App() {
       quadroVidro: false,
       bloco: '',
     }]);
+    // Capacidade Atuliazada
 
     setIsGerarVisible(true);
   };
@@ -859,6 +860,7 @@ function App() {
       },
     },
   });
+//Subindo atualizações2
 
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
