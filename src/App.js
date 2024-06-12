@@ -10,7 +10,7 @@ import { styled } from '@mui/material/styles';
 import Logo_Pas from '../src/Logo_Pas2.png'
 import Background_ from '../src/background_.jpg'
 import '../src/App.css'
-
+//Subindo novas atualizações
 function App() {
   const [salas, setSalas] = useState([]);
   const [turmas, setTurmas] = useState([]);
