@@ -727,6 +727,7 @@ function App() {
       quadroVidro: false,
       bloco: '',
     }]);
+    // Capacidade Atuliazada
 
     setIsGerarVisible(true);
   };
